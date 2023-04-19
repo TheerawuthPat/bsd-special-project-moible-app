@@ -1,9 +1,9 @@
 package com.bsd.specialproject.di
 
-import com.bsd.specialproject.MainViewModel
+import com.bsd.specialproject.ui.main.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val ViewModelDependency = module {
+val viewModelModule = module {
     viewModel { MainViewModel() }
 }
