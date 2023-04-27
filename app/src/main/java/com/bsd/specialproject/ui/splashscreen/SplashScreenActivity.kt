@@ -29,7 +29,7 @@ class SplashScreenActivity : AppCompatActivity() {
             }
 
             override fun onAnimationEnd(p0: Animator) {
-                if(appPreference.isFirstTime) {
+                if(!appPreference.isFirstTime) {
                     appRouter.toAddCreditCard(this@SplashScreenActivity)
                 } else {
                     appRouter.toMain(this@SplashScreenActivity)

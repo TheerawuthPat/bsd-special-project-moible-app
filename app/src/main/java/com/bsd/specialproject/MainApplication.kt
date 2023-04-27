@@ -7,6 +7,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
 import org.koin.core.component.KoinComponent
 import org.koin.core.context.startKoin
+import timber.log.Timber
 
 class MainApplication : Application(), KoinComponent {
 
@@ -17,6 +18,9 @@ class MainApplication : Application(), KoinComponent {
             androidContext(this@MainApplication)
             modules(appComponent)
             androidFileProperties()
+        }
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
         }
     }
 
