@@ -7,6 +7,7 @@ import com.bsd.specialproject.databinding.ActivityAddCreditCardBinding
 import com.bsd.specialproject.ui.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class AddCreditCardActivity : AppCompatActivity() {
 
@@ -32,6 +33,10 @@ class AddCreditCardActivity : AppCompatActivity() {
 
         binding.btnFirestore.setOnClickListener {
             viewModel.fetchCreditCard()
+        }
+
+        viewModel.creditCardList.observe(this) {creditCardList ->
+            Timber.d("!==! ${creditCardList}")
         }
     }
 }
