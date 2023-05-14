@@ -18,5 +18,6 @@ data class CreditCardModel(
     @SerializedName("name")
     val name: String? = null,
     @SerializedName("sourceBank")
-    val sourceBank: String? = null
+    val sourceBank: String? = null,
+    var isChecked: Boolean = false
 )

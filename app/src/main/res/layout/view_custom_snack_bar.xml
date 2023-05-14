@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/radius_1">
+
+    <FrameLayout
+        android:id="@+id/clSnackBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/space_2"
+        android:paddingVertical="@dimen/space_1.75"
+        tools:background="@color/red_300">
+
+        <TextView
+            android:id="@+id/tvSnackBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawablePadding="@dimen/space_1"
+            android:drawableTint="@color/grayscale_light_100"
+            android:textColor="@color/grayscale_light_100"
+            tools:text="Error" />
+
+    </FrameLayout>
+
+</com.google.android.material.card.MaterialCardView>
