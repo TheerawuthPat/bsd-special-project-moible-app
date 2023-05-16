@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/space_1.5"
+    android:paddingTop="@dimen/space_1"
+    android:paddingEnd="@dimen/space_1.5"
+    android:paddingBottom="@dimen/space_1">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_1"
+        android:textSize="18sp"
+        android:textColor="@color/grayscale_dark_300"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_view_all"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="หมวดหมู่" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_view_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="?selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:drawablePadding="@dimen/space_.5"
+        android:focusable="true"
+        android:textSize="16sp"
+        tools:text="เพิ่่มบัตรเครดิต"
+        android:textColor="@color/grayscale_dark_100"
+        app:drawableTint="@color/grayscale_dark_100"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_title"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

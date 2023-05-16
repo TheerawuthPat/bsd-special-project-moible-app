@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_my_credit_card_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_2"
+        android:text="MY CARDS"
+        android:textColor="@color/grayscale_dark_300"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tv_add_credit_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="My Cards" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_add_credit_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/space_2"
+        android:background="?selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:drawableEnd="@drawable/outline_add_card_24"
+        android:drawablePadding="@dimen/space_.5"
+        android:focusable="true"
+        android:textColor="@color/grayscale_dark_100"
+        android:textSize="16sp"
+        android:text="Add Cards"
+        app:drawableTint="@color/grayscale_dark_100"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_my_credit_card_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Add Credit Cards" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_my_cards"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:overScrollMode="never"
+        tools:listitem="@layout/item_my_credit_card_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_my_credit_card_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

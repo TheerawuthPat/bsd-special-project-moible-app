@@ -3,6 +3,7 @@ package com.bsd.specialproject.ui.addcreditcard
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.bsd.specialproject.AppRouter
 import com.bsd.specialproject.databinding.ActivityAddCreditCardBinding
 import com.bsd.specialproject.ui.addcreditcard.adapter.CreditCardAdapter
@@ -13,17 +14,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AddCreditCardActivity : AppCompatActivity() {
 
-    private val appRouter: AppRouter by inject()
-
     companion object {
-        fun start(activity: AppCompatActivity) {
-            val intent = Intent(activity, AddCreditCardActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            }
+        fun start(activity: FragmentActivity) {
+            val intent = Intent(activity, AddCreditCardActivity::class.java)
             activity.startActivity(intent)
         }
     }
 
+    private val appRouter: AppRouter by inject()
     private val viewModel: AddCreditCardViewModel by viewModel()
 
     private var _binding: ActivityAddCreditCardBinding? = null
