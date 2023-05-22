@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">BsdSpecialProject</string>
+    <string name="category_type">หมวดหมู่: %1$s</string>
+    <string name="two_category_type">หมวดหมู่: %1$s และ %2$s</string>
+    <string name="min_spend">ค่าใช้จ่ายขั้นต่ำ: %1$s บาท</string>
+    <string name="cashback_percent_per_time">รับเครดิตเงินคืนต่อครั้ง: %1$s เปอร์เซ็นต์</string>
+    <string name="cashback_step_spending">สะสมต่อใช้จ่าย: %1$s - %2$s บาท</string>
+    <string name="cashback_step_per_time">รับเครดิตเงินคืน: %1$s เปอร์เซ็นต์</string>
+    <string name="limit_cashback_per_month">เงินคืนสูงสุด/เดือน: %1$s บาท</string>
+    <string name="cashback_benefit_title">สิทธิประโยชน์ของเครดิตเงินคืน</string>
+    <string name="spend_step_title">สะสมยอดใช้จ่าย</string>
+    <string name="spend_step_1">%1$s - %2$s บาท</string>
+    <string name="spend_step_2">%1$s - %2$s บาท</string>
+    <string name="spend_step_3">%1$s บาทขึ้นไป</string>
+    <string name="cashback_step_title">รับเครดิตเงินคืน*</string>
+    <string name="cashback_step">%1$s เปอร์เซ็นต์</string>
 </resources>

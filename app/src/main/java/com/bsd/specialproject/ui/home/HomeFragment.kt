@@ -18,29 +18,6 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-//    private val concatAdapter by lazy {
-//        val config = ConcatAdapter.Config.Builder().apply {
-//            setIsolateViewTypes(false)
-//        }.build()
-//        ConcatAdapter(
-//            config,
-//            myCardsHeaderAdapter,
-//            myCardsAdapter
-//        )
-//    }
-
-//    private val myCardsHeaderAdapter by lazy {
-//        MyCardsHeaderAdapter(
-//            ViewTitleModel(
-//                title = "My Cards",
-//                icon = R.drawable.outline_add_card_24
-//            ),
-//            onClick = {
-//                //handle open add credit card
-//            }
-//        )
-//    }
-
     private val myCardsAdapter by lazy {
         MyCardsAdapter { }
     }
