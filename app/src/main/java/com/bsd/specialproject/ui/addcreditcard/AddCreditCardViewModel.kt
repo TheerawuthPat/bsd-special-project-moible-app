@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.bsd.specialproject.constants.CREDIT_CARD_LIST
 import com.bsd.specialproject.ui.addcreditcard.model.CreditCardModel
 import com.bsd.specialproject.utils.sharedprefer.AppPreference
+import com.bsd.specialproject.utils.toDefaultValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
@@ -16,6 +17,7 @@ class AddCreditCardViewModel(private val appPreference: AppPreference) : ViewMod
     fun fetchCreditCard() {
         val fbStore = Firebase.firestore
         fbStore.collection(CREDIT_CARD_LIST)
+            .whereNotIn("id", appPreference.myCreditCards?.toList().toDefaultValue())
             .get()
             .addOnSuccessListener { result ->
                 val creditCardList = mutableListOf<CreditCardModel>()
