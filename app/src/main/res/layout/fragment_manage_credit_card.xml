@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_manage_credit_card_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_2"
+        android:text="จัดการบัตรของฉัน"
+        android:textColor="@color/grayscale_dark_300"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:lineHeight="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_saved"
+        app:layout_constraintEnd_toStartOf="@+id/btn_saved"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:id="@+id/btn_saved"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:enabled="false"
+        android:background="@android:color/transparent"
+        android:text="ลบและบันทึก"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:lineHeight="20dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_manage_credit_card_title"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="true"
+        android:layout_marginTop="@dimen/space_1"
+        android:background="@color/grayscale_light_200"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_credit_card_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_manage_credit_card_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

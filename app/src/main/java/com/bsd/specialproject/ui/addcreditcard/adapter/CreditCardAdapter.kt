@@ -9,6 +9,7 @@ import com.bsd.specialproject.ui.addcreditcard.model.CreditCardModel
 import com.bsd.specialproject.ui.addcreditcard.viewholder.CreditCardViewHolder
 
 class CreditCardAdapter(
+    private val isEnableDelete: Boolean,
     private val onClick: (CreditCardClick) -> Unit
 ) : ListAdapter<CreditCardModel, CreditCardViewHolder>(DIFF_COMPARATOR) {
 
@@ -33,7 +34,7 @@ class CreditCardAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CreditCardViewHolder {
-        return CreditCardViewHolder.from(parent, onClick)
+        return CreditCardViewHolder.from(parent, isEnableDelete, onClick)
     }
 
     override fun onBindViewHolder(holder: CreditCardViewHolder, position: Int) {

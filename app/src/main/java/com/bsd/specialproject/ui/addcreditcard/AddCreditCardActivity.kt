@@ -11,6 +11,7 @@ import com.bsd.specialproject.ui.addcreditcard.adapter.click.CreditCardClick
 import com.bsd.specialproject.utils.toDefaultValue
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class AddCreditCardActivity : AppCompatActivity() {
 
@@ -22,7 +23,7 @@ class AddCreditCardActivity : AppCompatActivity() {
     }
 
     private val appRouter: AppRouter by inject()
-    private val viewModel: AddCreditCardViewModel by viewModel()
+    private val creditCardViewModel: CreditCardViewModel by viewModel()
 
     private var _binding: ActivityAddCreditCardBinding? = null
     private val binding get() = _binding!!
@@ -32,7 +33,7 @@ class AddCreditCardActivity : AppCompatActivity() {
             if (clicked is CreditCardClick.SelectedClick) {
                 bindSavedCardsButton()
             }
-        })
+        }, isEnableDelete = false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,10 +43,9 @@ class AddCreditCardActivity : AppCompatActivity() {
         setupToolbar()
         setupRecyclerView()
 
-        viewModel.fetchCreditCard()
-        viewModel.creditCardList.observe(this) { creditCardList ->
+        creditCardViewModel.fetchAddMoreCreditCard()
+        creditCardViewModel.creditCardList.observe(this) { creditCardList ->
             creditCardAdapter.submitList(creditCardList)
-            bindSavedCardsButton()
         }
     }
 
@@ -69,10 +69,11 @@ class AddCreditCardActivity : AppCompatActivity() {
         }.map {
             it.id.toDefaultValue()
         }
+
         with(binding.btnSaved) {
             isEnabled = isSelectedCard
             setOnClickListener {
-                viewModel.savedToMyCards(creditCardChecked)
+                creditCardViewModel.addedToMyCards(creditCardChecked)
                 appRouter.toMain(this@AddCreditCardActivity)
             }
         }

@@ -17,7 +17,7 @@ class AppPreferenceImpl constructor(
             preferenceStorage.putBoolean(SharedPrefConstants.FIRST_TIME, value)
         }
     override var myCreditCards: Set<String>?
-        get() = preferenceStorage.getStringSet(MY_CREDIT_CARDS)
+        get() = preferenceStorage.getStringSet(MY_CREDIT_CARDS)?.distinct()?.toSet()
         set(value) {
             value?.let {
                 preferenceStorage.putStringSet(MY_CREDIT_CARDS, it)

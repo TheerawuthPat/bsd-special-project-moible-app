@@ -17,4 +17,10 @@
         android:label="PromotionFragment"
         tools:layout="@layout/fragment_promotion" />
 
+    <fragment
+        android:id="@+id/manageCreditCardFragment"
+        android:name="com.bsd.specialproject.ui.managecreditcard.ManageCreditCardFragment"
+        android:label="ManageCreditCardFragment"
+        tools:layout="@layout/fragment_manage_credit_card" />
+
 </navigation>

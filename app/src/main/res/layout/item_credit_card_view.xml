@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="8dp"
-    android:paddingHorizontal="8dp">
+    android:paddingHorizontal="8dp"
+    android:paddingTop="8dp">
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/checkbox"
@@ -40,10 +40,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
         android:clickable="false"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:foreground="?selectableItemBackground"
         android:textColor="@color/grayscale_dark_300"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/iv_credit_card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_credit_card"
@@ -54,9 +54,21 @@
         android:id="@+id/view_divider"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/white"
         android:layout_marginTop="4dp"
+        android:background="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_credit_card" />
+
+
+    <View
+        android:id="@+id/view_white_paper"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/alpha_black_100"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

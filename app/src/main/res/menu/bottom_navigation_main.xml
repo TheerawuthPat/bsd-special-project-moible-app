@@ -8,4 +8,8 @@
         android:id="@+id/promotionFragment"
         android:icon="@drawable/outline_dehaze_24"
         android:title="Promotion " />
+    <item
+        android:id="@+id/manageCreditCardFragment"
+        android:icon="@drawable/outline_credit_card_24"
+        android:title="My CreditCard " />
 </menu>

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import com.bsd.specialproject.R
 import com.bsd.specialproject.databinding.ActivityMainBinding
 import com.bsd.specialproject.ui.home.HomeFragment
+import com.bsd.specialproject.ui.managecreditcard.ManageCreditCardFragment
 import com.bsd.specialproject.ui.promotion.PromotionFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -32,6 +33,9 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.promotionFragment -> {
                 selectedFragment = PromotionFragment()
+            }
+            R.id.manageCreditCardFragment -> {
+                selectedFragment = ManageCreditCardFragment()
             }
         }
         supportFragmentManager.beginTransaction().replace(R.id.navHostFragment, selectedFragment).commit()
