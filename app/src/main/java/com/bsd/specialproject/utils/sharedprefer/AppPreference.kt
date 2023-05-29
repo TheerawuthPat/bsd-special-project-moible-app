@@ -1,10 +1,12 @@
 package com.bsd.specialproject.utils.sharedprefer
 
 import com.bsd.specialproject.utils.sharedprefer.SharedPrefConstants.MY_CREDIT_CARDS
+import com.bsd.specialproject.utils.sharedprefer.SharedPrefConstants.MY_EXPENSE_LAST_MONTH
 
 interface AppPreference {
     var isFirstTime: Boolean
     var myCreditCards: Set<String>?
+    var myExpenseLastMonth: String
 }
 
 class AppPreferenceImpl constructor(
@@ -21,6 +23,13 @@ class AppPreferenceImpl constructor(
         set(value) {
             value?.let {
                 preferenceStorage.putStringSet(MY_CREDIT_CARDS, it)
+            }
+        }
+    override var myExpenseLastMonth: String
+        get() = preferenceStorage.getString(MY_EXPENSE_LAST_MONTH)
+        set(value) {
+            value.let {
+                preferenceStorage.putString(MY_EXPENSE_LAST_MONTH, it)
             }
         }
 }

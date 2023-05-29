@@ -51,7 +51,7 @@ class AddCreditCardActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         with(binding.viewToolbar) {
-            tvToolbarTitle.text = "Add Credit Cards"
+            tvToolbarTitle.text = "เพิ่มบัตรเครดิต"
             ivToolbarBack.setOnClickListener {
                 finish()
             }

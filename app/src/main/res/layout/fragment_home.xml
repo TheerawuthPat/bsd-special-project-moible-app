@@ -5,6 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/view_my_expense"
+        layout="@layout/view_expense_last_month"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_my_credit_card_title"
         android:layout_width="0dp"
@@ -16,7 +23,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tv_add_credit_card"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_my_expense"
         tools:text="My Cards" />
 
     <androidx.appcompat.widget.AppCompatTextView
