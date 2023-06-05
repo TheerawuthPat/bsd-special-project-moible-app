@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:text="ค่าใช้จ่ายย้อนหลังเดือนที่แล้ว"
                 android:textColor="@color/blue_dark_300"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_.5"
                 android:text="สามารถนำมาใช้ช่วยวางแผนกลยุทธ์ในการใช้บัตรเครดิตของท่านได้"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_my_expense_title"
                 app:lineHeight="20dp" />
@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:maxLength="7"
                     android:inputType="number"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

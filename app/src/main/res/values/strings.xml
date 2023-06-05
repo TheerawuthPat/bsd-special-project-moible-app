@@ -15,4 +15,8 @@
     <string name="cashback_step_title">รับเครดิตเงินคืน*</string>
     <string name="cashback_step">%1$s เปอร์เซ็นต์</string>
     <string name="my_expense">%1$s บาท</string>
+    <string-array name="category_menu">
+        <item>Shopping</item>
+        <item>Dining</item>
+    </string-array>
 </resources>

@@ -2,6 +2,7 @@ package com.bsd.specialproject.ui.home
 
 import android.os.Bundle
 import android.view.*
+import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -43,6 +44,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupCategoryDropDownMenu()
         initRecyclerView()
         setupMyExpenseLastMonth()
         binding.tvAddCreditCard.setOnClickListener {
@@ -111,6 +113,17 @@ class HomeFragment : Fragment() {
                     setSelection(this.editableText.length)
                     requestFocus()
                 }
+            }
+        }
+    }
+
+    private fun setupCategoryDropDownMenu() {
+        val categoryMenuName = resources.getStringArray(R.array.category_menu)
+        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.item_category_dropdown, categoryMenuName)
+        with(binding.viewFindingBestOfCard) {
+            autocompleteCategoryMenu.setAdapter(arrayAdapter)
+            textInputEditTextFindCard.doAfterTextChanged {
+                btnFind.isEnabled = it.toString().isNotEmpty() && autocompleteCategoryMenu.text.toString().isNotEmpty()
             }
         }
     }
