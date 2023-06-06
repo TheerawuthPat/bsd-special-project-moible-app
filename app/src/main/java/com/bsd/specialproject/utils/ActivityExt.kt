@@ -1,12 +1,14 @@
 package com.bsd.specialproject.utils
 
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bsd.specialproject.R
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -51,4 +53,14 @@ fun Activity.showCustomSnackBar(
     snackBarView.setBackgroundColor(Color.TRANSPARENT)
     snackBarView.addView(layout, 0)
     snackBar.show()
+}
+
+fun Activity.checkAndRequestPermissions(permissions: Array<String>, code: Int, action: () -> Unit) {
+    if (permissions.all {
+            ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
+        }) {
+        action.invoke()
+    } else {
+        ActivityCompat.requestPermissions(this, permissions, code)
+    }
 }

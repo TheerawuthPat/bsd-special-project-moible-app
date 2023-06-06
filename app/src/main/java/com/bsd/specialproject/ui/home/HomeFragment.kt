@@ -1,8 +1,10 @@
 package com.bsd.specialproject.ui.home
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -125,6 +127,33 @@ class HomeFragment : Fragment() {
             textInputEditTextFindCard.doAfterTextChanged {
                 btnFind.isEnabled = it.toString().isNotEmpty() && autocompleteCategoryMenu.text.toString().isNotEmpty()
             }
+            btnFind.setOnClickListener {
+                handleRequestLocationPermission()
+            }
         }
+    }
+
+    private fun handleRequestLocationPermission() {
+        requireActivity().checkAndRequestPermissions(
+            arrayOf(
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ),
+            LOCATION_PERMISSION_CODE
+        ) {
+            Toast.makeText(requireContext(), "Allow Location", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(requireContext(), "Accept Allow Location", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    companion object {
+        const val LOCATION_PERMISSION_CODE = 0
     }
 }
