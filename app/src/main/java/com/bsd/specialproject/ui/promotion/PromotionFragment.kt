@@ -1,13 +1,11 @@
 package com.bsd.specialproject.ui.promotion
 
-import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bsd.specialproject.databinding.FragmentPromotionBinding
-import com.bsd.specialproject.ui.home.HomeFragment
-import com.bsd.specialproject.utils.checkAndRequestPermissions
+import timber.log.Timber
 
 class PromotionFragment : Fragment() {
 
@@ -19,33 +17,27 @@ class PromotionFragment : Fragment() {
         // cal api
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPromotionBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        handleRequestLocationPermission()
+        testDistanceToMethod()
     }
 
-    private fun handleRequestLocationPermission() {
-        requireActivity().checkAndRequestPermissions(
-            arrayOf(
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            HomeFragment.LOCATION_PERMISSION_CODE
-        ) {
-            Toast.makeText(requireContext(), "Allow Location", Toast.LENGTH_LONG).show()
-        }
-    }
+    private fun testDistanceToMethod() {
+        val currentLocation = Location("50 Years Faculty of Commerce and Accountancy Tower")
+        currentLocation.latitude = 13.733982474577605
+        currentLocation.longitude = 100.52948211475976
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == HomeFragment.LOCATION_PERMISSION_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(requireContext(), "Accept Allow Location", Toast.LENGTH_LONG).show()
-            }
-        }
+        val destinationPoint = Location("Faculty of Commerce and Accountancy (CU)")
+        destinationPoint.latitude = 13.727837439035023
+        destinationPoint.longitude = 100.5325308949121
+
+        val distance: Float = currentLocation.distanceTo(destinationPoint)
+
+        Timber.d("!==! Distance: ${distance} meters")
     }
 }

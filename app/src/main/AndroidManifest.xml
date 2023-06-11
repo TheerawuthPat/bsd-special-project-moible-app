@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -37,10 +36,17 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.addcreditcard.AddCreditCardActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.searchresult.SearchResultActivity"
+            android:screenOrientation="portrait" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"
+            tools:replace="android:value" />
     </application>
 </manifest>

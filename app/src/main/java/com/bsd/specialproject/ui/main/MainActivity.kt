@@ -31,9 +31,11 @@ class MainActivity : AppCompatActivity() {
             R.id.homeFragment -> {
                 selectedFragment = HomeFragment()
             }
+
             R.id.promotionFragment -> {
                 selectedFragment = PromotionFragment()
             }
+
             R.id.manageCreditCardFragment -> {
                 selectedFragment = ManageCreditCardFragment()
             }

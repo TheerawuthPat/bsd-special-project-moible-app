@@ -43,9 +43,7 @@ class CreditCardViewHolder(
             )
             tvCreditCardName.text = item.name.toDefaultValue()
             checkbox.setOnCheckedChangeListener { _, isChecked ->
-                Timber.d("!==! isChecked: ${isChecked}")
                 item.isChecked = isChecked
-                Timber.d("!==! item.isChecked: ${item.isChecked}")
                 onClicked?.invoke(CreditCardClick.SelectedClick(item))
                 if(isChecked && isEnableDelete) {
                     checkbox.setButtonIconDrawableResource(R.drawable.baseline_indeterminate_check_box_20)

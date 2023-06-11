@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -42,6 +43,7 @@ dependencies {
     def navigation_version = "2.5.2"
 
     //Android Framework
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
@@ -68,6 +70,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'com.jakewharton.timber:timber:5.0.1'
     implementation 'com.airbnb.android:lottie:5.1.1'
+
+    implementation('io.nlopez.smartlocation:library:3.3.3')
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

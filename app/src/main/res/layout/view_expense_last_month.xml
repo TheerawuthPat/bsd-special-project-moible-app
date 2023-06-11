@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:text="ค่าใช้จ่ายย้อนหลังเดือนที่แล้ว"
                 android:textColor="@color/blue_dark_300"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

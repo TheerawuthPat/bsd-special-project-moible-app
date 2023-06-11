@@ -17,7 +17,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_credit_card"
             android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:clickable="false"
             android:foreground="?selectableItemBackground"
             android:scaleType="fitCenter"
@@ -30,8 +30,8 @@
             android:id="@+id/tv_credit_card_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_1"
             android:layout_marginStart="@dimen/space_2"
-            android:layout_marginTop="@dimen/space_2.5"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAlignment="textStart"
@@ -39,7 +39,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/iv_credit_card"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_credit_card"
             app:lineHeight="20dp"
             tools:text="Krungsri Now" />
 
@@ -47,7 +47,6 @@
             android:id="@+id/tv_cashback_benefit_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_1"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/cashback_benefit_title"

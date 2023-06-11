@@ -1,10 +1,10 @@
 package com.bsd.specialproject.ui.home
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -14,6 +14,7 @@ import com.bsd.specialproject.R
 import com.bsd.specialproject.databinding.FragmentHomeBinding
 import com.bsd.specialproject.ui.addcreditcard.CreditCardViewModel
 import com.bsd.specialproject.ui.home.adapter.MyCardsAdapter
+import com.bsd.specialproject.ui.searchresult.model.SearchResultModel
 import com.bsd.specialproject.utils.*
 import com.bsd.specialproject.utils.sharedprefer.AppPreference
 import org.koin.android.ext.android.inject
@@ -31,6 +32,17 @@ class HomeFragment : Fragment() {
 
     private val myCardsAdapter by lazy {
         MyCardsAdapter { }
+    }
+
+    private val locationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            requireContext().showToastMessage("Granted Location Permission")
+        } else {
+            requireContext().showToastMessage("Denied Location Permission")
+        }
+        navigateToSearchResultPage()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -123,7 +135,13 @@ class HomeFragment : Fragment() {
         val categoryMenuName = resources.getStringArray(R.array.category_menu)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.item_category_dropdown, categoryMenuName)
         with(binding.viewFindingBestOfCard) {
-            autocompleteCategoryMenu.setAdapter(arrayAdapter)
+            autocompleteCategoryMenu.apply {
+                setAdapter(arrayAdapter)
+                setOnItemClickListener { adapterView, view, i, l ->
+                    btnFind.isEnabled = textInputEditTextFindCard.text.toString()
+                        .isNotEmpty() && autocompleteCategoryMenu.text.toString().isNotEmpty()
+                }
+            }
             textInputEditTextFindCard.doAfterTextChanged {
                 btnFind.isEnabled = it.toString().isNotEmpty() && autocompleteCategoryMenu.text.toString().isNotEmpty()
             }
@@ -134,26 +152,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun handleRequestLocationPermission() {
-        requireActivity().checkAndRequestPermissions(
-            arrayOf(
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            LOCATION_PERMISSION_CODE
-        ) {
-            Toast.makeText(requireContext(), "Allow Location", Toast.LENGTH_LONG).show()
-        }
+        locationPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(requireContext(), "Accept Allow Location", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-
-    companion object {
-        const val LOCATION_PERMISSION_CODE = 0
+    private fun navigateToSearchResultPage() {
+        val searchResultModel = SearchResultModel(
+            estimateSpend = binding.viewFindingBestOfCard.textInputEditTextFindCard.text.toString().toInt(),
+            categorySpend = binding.viewFindingBestOfCard.autocompleteCategoryMenu.text.toString()
+        )
+        appRouter.toSearchResult(requireActivity(), searchResultModel)
     }
 }
