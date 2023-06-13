@@ -3,6 +3,7 @@ package com.bsd.specialproject.ui.home.viewholder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bsd.specialproject.databinding.ItemTitleViewAllViewBinding
 import com.bsd.specialproject.ui.home.model.ViewTitleModel
@@ -29,14 +30,11 @@ class TitleViewAllViewHolder(
             tvTitle.apply {
                 text = title
             }
-            tvViewAll.setCompoundDrawables(
-                null,
-                null,
-                AppCompatResources.getDrawable(viewContext, icon),
-                null
-            )
-            tvViewAll.setOnClickListener {
-                onClick.invoke()
+            tvViewAll.apply {
+                isVisible = item.isShowViewAll
+                setOnClickListener {
+                    onClick.invoke()
+                }
             }
         }
     }

@@ -19,4 +19,8 @@
         <item>Shopping</item>
         <item>Dining</item>
     </string-array>
+    <string name="more_accumulate_spending">จำนวนเงินที่ต้องสะสมเพิ่ม: %1$s บาท</string>
+    <string name="cashback_earned">จะได้รับเครดิตเงินคืน: %1$s บาท</string>
+    <string name="promotion_expired_date">โปรโมชั่นจะหมดอายุภายใน: %1$s วัน</string>
+    <string name="saved_promotion_date">ลงทะเบียนไว้เมื่อ: %1$s</string>
 </resources>

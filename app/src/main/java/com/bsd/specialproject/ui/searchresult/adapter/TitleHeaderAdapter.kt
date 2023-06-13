@@ -1,11 +1,11 @@
-package com.bsd.specialproject.ui.home.adapter
+package com.bsd.specialproject.ui.searchresult.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bsd.specialproject.ui.home.model.ViewTitleModel
 import com.bsd.specialproject.ui.home.viewholder.TitleViewAllViewHolder
 
-class MyCardsHeaderAdapter(
+class TitleWithViewAllAdapter(
     private val viewTitleModel: ViewTitleModel,
     private val onClick: () -> Unit
 ) : RecyclerView.Adapter<TitleViewAllViewHolder>() {

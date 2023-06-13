@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/space_1"
+    app:cardCornerRadius="@dimen/radius_1"
+    app:cardElevation="@dimen/space_.5">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/space_1">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_promotion_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lineHeight="20dp"
+            tools:text="ชื่อโปรโมชั่น: BBGON กินอิ่ม" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_more_accumulate_spending"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_promotion_name"
+            app:lineHeight="20dp"
+            tools:text="จำนวนเงินที่ต้องสะสมเพิ่ม: 500 บาท" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_cashback_earned"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_more_accumulate_spending"
+            app:lineHeight="20dp"
+            tools:text="จะได้รับเครดิตเงินคืน: 300 บาท" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_promotion_expired_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_cashback_earned"
+            app:lineHeight="20dp"
+            tools:text="โปรโมชั่นจะหมดอายุภายใน: 30 วัน" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_saved_promotion_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_2"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_promotion_expired_date"
+            app:lineHeight="20dp"
+            tools:text="ลงทะเบียนไว้เมื่อ: 01/12/2022" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

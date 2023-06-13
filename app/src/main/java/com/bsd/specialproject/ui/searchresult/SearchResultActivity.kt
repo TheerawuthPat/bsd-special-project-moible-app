@@ -5,8 +5,13 @@ import android.location.Location
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bsd.specialproject.AppRouter
 import com.bsd.specialproject.databinding.ActivitySearchResultBinding
+import com.bsd.specialproject.ui.home.model.ViewTitleModel
+import com.bsd.specialproject.ui.searchresult.adapter.CreditCardBenefitAdapter
+import com.bsd.specialproject.ui.searchresult.adapter.TitleWithViewAllAdapter
 import com.bsd.specialproject.ui.searchresult.model.SearchResultModel
 import io.nlopez.smartlocation.OnLocationUpdatedListener
 import io.nlopez.smartlocation.SmartLocation
@@ -38,11 +43,51 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         SmartLocation.with(this).location()
     }
 
+    // Adapter
+    private val titleCreditCardBenefitAdapter by lazy {
+        TitleWithViewAllAdapter(
+            ViewTitleModel(
+                title = "สิทธิประโยชน์เครดิตเงินคืนของบัตร",
+                isShowViewAll = false
+            ),
+            onClick = {
+                // click view all
+            }
+        )
+    }
+    private val creditCardBenefitAdapter by lazy {
+        CreditCardBenefitAdapter(onClick = {
+
+        })
+    }
+    private val titleMyPromotionAdapter by lazy {
+        TitleWithViewAllAdapter(
+            ViewTitleModel(
+                title = "โปรโมชั่นของฉัน",
+                isShowViewAll = false
+            ),
+            onClick = {
+                // click view all
+            }
+        )
+    }
+    private val myPromotionAdapter by lazy {
+
+    }
+    val concatAdapter: ConcatAdapter by lazy {
+        val config = ConcatAdapter.Config.Builder().apply {
+            setIsolateViewTypes(false)
+        }.build()
+        ConcatAdapter(config, titleCreditCardBenefitAdapter, creditCardBenefitAdapter, titlePromotionTrackingAdapter)
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivitySearchResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar()
+        setupRecyclerView()
     }
 
     private fun setupToolbar() {
@@ -52,6 +97,11 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
                 finish()
             }
         }
+    }
+
+    private fun setupRecyclerView() = with(binding.recyclerView) {
+        layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        adapter = concatAdapter
     }
 
     override fun onStart() {
