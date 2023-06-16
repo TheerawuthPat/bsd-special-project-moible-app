@@ -23,4 +23,7 @@
     <string name="cashback_earned">จะได้รับเครดิตเงินคืน: %1$s บาท</string>
     <string name="promotion_expired_date">โปรโมชั่นจะหมดอายุภายใน: %1$s วัน</string>
     <string name="saved_promotion_date">ลงทะเบียนไว้เมื่อ: %1$s</string>
+    <string name="cashback_earned_category">ได้รับเครดิตเงินคืนในหมวดหมู่: %1$s</string>
+    <string name="calculate_cashback_earned">%1$s เปอร์เซ็นต์ คิดเป็นจำนวนเงิน: %2$s บาท</string>
+    <string name="estimate_spending">ของจำนวนเงินที่คาดว่าจะใช้จ่าย %1$s บาท</string>
 </resources>

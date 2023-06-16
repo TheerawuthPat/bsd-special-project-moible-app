@@ -2,9 +2,10 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/space_1"
+    android:background="@color/white"
     app:cardCornerRadius="@dimen/radius_1"
     app:cardElevation="@dimen/space_.5">
 
@@ -16,14 +17,18 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_credit_card"
-            android:layout_width="100dp"
-            android:layout_height="80dp"
+            android:layout_width="160dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
             android:clickable="false"
             android:foreground="?selectableItemBackground"
             android:scaleType="fitCenter"
+            android:padding="@dimen/space_.125"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+            app:srcCompat="@drawable/placeholder_credit_card"
             tools:src="@drawable/placeholder_product" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -31,102 +36,61 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_1"
-            android:layout_marginStart="@dimen/space_2"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAlignment="textStart"
             android:textColor="@color/blue_dark_300"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/iv_credit_card"
-            app:layout_constraintTop_toTopOf="@+id/iv_credit_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_credit_card"
             app:lineHeight="20dp"
             tools:text="Krungsri Now" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_cashback_benefit_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@string/cashback_benefit_title"
-            android:textColor="@color/blue_dark_300"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_credit_card"
-            app:lineHeight="20dp"
-            tools:text="สิทธิประโยชน์ของเครดิตเงินคืน" />
-
-        <View
-            android:id="@+id/view_divider"
-            android:layout_width="0dp"
-            android:layout_height="2dp"
-            android:layout_marginTop="@dimen/space_.5"
-            android:background="@color/grayscale_light_300"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_cashback_benefit_title" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_category_type"
+            android:id="@+id/tv_cashback_earned_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_2"
+            android:layout_marginTop="@dimen/space_1"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAlignment="textStart"
             android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@+id/iv_credit_card"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_credit_card_name"
             app:lineHeight="20dp"
-            tools:text="หมวดหมู่: ร้านอาหาร" />
+            tools:text="ได้รับเครดิตเงินคืนในหมวดหมู่: ร้านอาหาร" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_min_spend"
+            android:id="@+id/tv_cashback_earned_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_2"
+            android:layout_marginTop="@dimen/space_1"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAlignment="textStart"
             android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@+id/iv_credit_card"
-            app:layout_constraintTop_toBottomOf="@+id/tv_category_type"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_cashback_earned_category"
             app:lineHeight="20dp"
-            tools:text="ค่าใช้จ่ายขั้นต่ำ: %1$s" />
+            tools:text="3 เปอร์เซ็น คิดเป็นจำนวนเงิน: 200 บาท" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_cashback_per_time"
-            android:layout_width="0dp"
+            android:id="@+id/tv_estimate_spending"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_.5"
+            android:layout_marginTop="@dimen/space_1"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textAlignment="textStart"
             android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_divider"
+            app:layout_constraintTop_toBottomOf="@+id/tv_cashback_earned_money"
             app:lineHeight="20dp"
-            tools:text="ได้รับเครดิตเงินคืนต่อครั้ง: 3 เปอร์เซ็นต์" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_limit_cashback_per_month"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_cashback_per_time"
-            app:lineHeight="20dp"
-            tools:text="เงินคืนสูงสุด/เดือน: 500 บาท" />
+            tools:text="ของจำนวนเงินที่คาดว่าจะใช้จ่าย 100 บาท" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

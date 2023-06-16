@@ -4,29 +4,29 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 import com.bsd.specialproject.R
 import com.bsd.specialproject.ui.addcreditcard.adapter.click.CreditCardClick
-import com.bsd.specialproject.ui.addcreditcard.model.CreditCardModel
 import com.bsd.specialproject.ui.home.viewholder.EmptyViewHolder
+import com.bsd.specialproject.ui.searchresult.model.CreditCardSearchResultModel
 import com.bsd.specialproject.ui.searchresult.viewholder.CreditCardBenefitViewHolder
 
 class CreditCardBenefitAdapter(
     private val onClick: (CreditCardClick) -> Unit
-) : ListAdapter<CreditCardModel, RecyclerView.ViewHolder>(DIFF_COMPARATOR) {
+) : ListAdapter<CreditCardSearchResultModel, RecyclerView.ViewHolder>(DIFF_COMPARATOR) {
 
     companion object {
         const val CREDIT_CARD_BENEFIT_VIEW_TYPE = R.layout.item_credit_card_benefit_view
         const val EMPTY_VIEW_TYPE = R.layout.item_empty_view
 
-        val DIFF_COMPARATOR = object : DiffUtil.ItemCallback<CreditCardModel>() {
+        val DIFF_COMPARATOR = object : DiffUtil.ItemCallback<CreditCardSearchResultModel>() {
             override fun areItemsTheSame(
-                oldItem: CreditCardModel,
-                newItem: CreditCardModel
+                oldItem: CreditCardSearchResultModel,
+                newItem: CreditCardSearchResultModel
             ): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.name == newItem.name
             }
 
             override fun areContentsTheSame(
-                oldItem: CreditCardModel,
-                newItem: CreditCardModel
+                oldItem: CreditCardSearchResultModel,
+                newItem: CreditCardSearchResultModel
             ): Boolean {
                 return oldItem == newItem
             }
@@ -39,7 +39,6 @@ class CreditCardBenefitAdapter(
             CREDIT_CARD_BENEFIT_VIEW_TYPE -> {
                 CreditCardBenefitViewHolder.from(parent, onClick)
             }
-
             else -> {
                 EmptyViewHolder.from(parent)
             }

@@ -2,20 +2,24 @@ package com.bsd.specialproject.ui.searchresult
 
 import android.content.Intent
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bsd.specialproject.AppRouter
+import com.bsd.specialproject.R
 import com.bsd.specialproject.databinding.ActivitySearchResultBinding
+import com.bsd.specialproject.ui.common.adapter.HorizontalWrapperAdapter
 import com.bsd.specialproject.ui.home.model.ViewTitleModel
-import com.bsd.specialproject.ui.searchresult.adapter.CreditCardBenefitAdapter
-import com.bsd.specialproject.ui.searchresult.adapter.TitleWithViewAllAdapter
+import com.bsd.specialproject.ui.searchresult.adapter.*
 import com.bsd.specialproject.ui.searchresult.model.SearchResultModel
 import io.nlopez.smartlocation.OnLocationUpdatedListener
 import io.nlopez.smartlocation.SmartLocation
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
@@ -32,6 +36,7 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
     }
 
     private val appRouter: AppRouter by inject()
+    private val searchResultViewModel: SearchResultViewModel by viewModel()
 
     private var _binding: ActivitySearchResultBinding? = null
     private val binding get() = _binding!!
@@ -60,6 +65,11 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
 
         })
     }
+    private val horizontalCreditCardBenefitAdapter by lazy {
+        HorizontalWrapperAdapter(
+            creditCardBenefitAdapter
+        )
+    }
     private val titleMyPromotionAdapter by lazy {
         TitleWithViewAllAdapter(
             ViewTitleModel(
@@ -72,22 +82,42 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         )
     }
     private val myPromotionAdapter by lazy {
+        MyPromotionAdapter(
+            onClick = {
 
+            }
+        )
     }
     val concatAdapter: ConcatAdapter by lazy {
         val config = ConcatAdapter.Config.Builder().apply {
             setIsolateViewTypes(false)
         }.build()
-        ConcatAdapter(config, titleCreditCardBenefitAdapter, creditCardBenefitAdapter, titlePromotionTrackingAdapter)
+        ConcatAdapter(
+            config,
+            titleCreditCardBenefitAdapter,
+            horizontalCreditCardBenefitAdapter,
+            titleMyPromotionAdapter,
+            myPromotionAdapter
+        )
     }
 
+    private var _searchResultModel: SearchResultModel? = null
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivitySearchResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar()
         setupRecyclerView()
+
+        searchResultViewModel.setArgumentModel(
+            intent.getParcelableExtra(SEARCH_RESULT_MODEL)
+        )
+        searchResultViewModel.fetchCardResult()
+        searchResultViewModel.creditCardSearchResultList.observe(this) { creditCardResultModelList ->
+            creditCardBenefitAdapter.submitList(creditCardResultModelList)
+        }
     }
 
     private fun setupToolbar() {
