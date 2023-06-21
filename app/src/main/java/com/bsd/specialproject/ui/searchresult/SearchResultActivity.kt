@@ -10,11 +10,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bsd.specialproject.AppRouter
-import com.bsd.specialproject.R
 import com.bsd.specialproject.databinding.ActivitySearchResultBinding
 import com.bsd.specialproject.ui.common.adapter.HorizontalWrapperAdapter
 import com.bsd.specialproject.ui.home.model.ViewTitleModel
 import com.bsd.specialproject.ui.searchresult.adapter.*
+import com.bsd.specialproject.ui.searchresult.adapter.click.PromotionClick
+import com.bsd.specialproject.ui.searchresult.model.MyLocation
 import com.bsd.specialproject.ui.searchresult.model.SearchResultModel
 import io.nlopez.smartlocation.OnLocationUpdatedListener
 import io.nlopez.smartlocation.SmartLocation
@@ -47,6 +48,7 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
     private val smartLocation by lazy {
         SmartLocation.with(this).location()
     }
+    private var myLocation: MyLocation? = null
 
     // Adapter
     private val titleCreditCardBenefitAdapter by lazy {
@@ -88,6 +90,22 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
             }
         )
     }
+    private val titleForYouPromotionAdapter by lazy {
+        TitleForYouHeaderAdapter(onClicked = { click ->
+            if (click is PromotionClick.FilterByCashbackClick) {
+                searchResultViewModel.fetchPromotion(null)
+            } else {
+                searchResultViewModel.fetchPromotion(myLocation)
+            }
+        })
+    }
+    private val forYouPromotionAdapter by lazy {
+        ForYouPromotionAdapter(
+            onClick = {
+
+            }
+        )
+    }
     val concatAdapter: ConcatAdapter by lazy {
         val config = ConcatAdapter.Config.Builder().apply {
             setIsolateViewTypes(false)
@@ -97,7 +115,9 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
             titleCreditCardBenefitAdapter,
             horizontalCreditCardBenefitAdapter,
             titleMyPromotionAdapter,
-            myPromotionAdapter
+            myPromotionAdapter,
+            titleForYouPromotionAdapter,
+            forYouPromotionAdapter
         )
     }
 
@@ -114,9 +134,29 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         searchResultViewModel.setArgumentModel(
             intent.getParcelableExtra(SEARCH_RESULT_MODEL)
         )
-        searchResultViewModel.fetchCardResult()
+        searchResultViewModel.searchResultModel.observe(this) {
+            searchResultViewModel.fetchCardResult()
+            if (!it.isGrantedLocation) {
+                searchResultViewModel.fetchPromotion(null)
+            }
+        }
         searchResultViewModel.creditCardSearchResultList.observe(this) { creditCardResultModelList ->
             creditCardBenefitAdapter.submitList(creditCardResultModelList)
+        }
+        searchResultViewModel.foryouPromotionList.observe(this) { forYouPromotionList ->
+            titleForYouPromotionAdapter.apply {
+                isGrantedLocation =
+                    searchResultViewModel.searchResultModel.value?.isGrantedLocation == true
+                submitList(
+                    listOf(
+                        ViewTitleModel(
+                            title = "โปรโมชั่นสำหรับคุณ",
+                            isShowViewAll = false
+                        )
+                    )
+                )
+            }
+            forYouPromotionAdapter.submitList(forYouPromotionList)
         }
     }
 
@@ -149,6 +189,12 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
     override fun onLocationUpdated(location: Location) {
         val latitude: Double = location.latitude
         val longitude: Double = location.longitude
+        val currentLocation = Location("50 Years Faculty of Commerce and Accountancy Tower")
+        currentLocation.latitude = 13.733982474577605
+        currentLocation.longitude = 100.52948211475976
+        myLocation = MyLocation(currentLocation.latitude, currentLocation.longitude)
+
+        searchResultViewModel.fetchPromotion(myLocation)
         Timber.d("!==! lat: ${latitude}")
         Timber.d("!==! lng: ${longitude}")
     }

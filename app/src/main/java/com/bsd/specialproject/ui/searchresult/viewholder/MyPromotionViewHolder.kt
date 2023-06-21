@@ -4,13 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bsd.specialproject.R
-import com.bsd.specialproject.databinding.ItemMyCreditCardViewBinding
 import com.bsd.specialproject.databinding.ItemMyPromotionViewBinding
 import com.bsd.specialproject.ui.addcreditcard.adapter.click.CreditCardClick
-import com.bsd.specialproject.ui.addcreditcard.model.CreditCardModel
 import com.bsd.specialproject.ui.searchresult.model.MyPromotionModel
-import com.bsd.specialproject.utils.loadImage
-import com.bsd.specialproject.utils.toDefaultValue
 
 class MyPromotionViewHolder(
     val binding: ItemMyPromotionViewBinding,

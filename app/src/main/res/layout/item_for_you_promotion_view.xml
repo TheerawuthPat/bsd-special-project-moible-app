@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_margin="@dimen/space_1"
+    app:cardElevation="@dimen/space_.5"
+    app:cardCornerRadius="@dimen/radius_1">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:padding="@dimen/space_1">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_promotion_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tv_distance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread"
+            app:lineHeight="20dp"
+            tools:text="ชื่อโปรโมชั่น: BBGON กินอิ่ม" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_distance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/space_1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_cashback_earned_percent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_promotion_name"
+            app:lineHeight="20dp"
+            tools:text="ระยะทาง 12 เมตร" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_cashback_earned_percent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/space_.5"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_cashback_earned_bath"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_distance"
+            app:lineHeight="20dp"
+            tools:text="จะได้รับเครดิตเงินคืน: 15 %" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_cashback_earned_bath"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/iv_register_promotion"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_cashback_earned_percent"
+            app:lineHeight="20dp"
+            tools:text="คิดเป็นจำนวนเงิน 150 บาท" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_register_promotion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
+            android:padding="@dimen/space_.5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_cashback_earned_bath"
+            app:srcCompat="@drawable/outline_save_alt_24" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

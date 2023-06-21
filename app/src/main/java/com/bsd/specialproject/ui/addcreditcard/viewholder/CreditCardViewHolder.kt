@@ -7,10 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bsd.specialproject.R
 import com.bsd.specialproject.databinding.ItemCreditCardViewBinding
 import com.bsd.specialproject.ui.addcreditcard.adapter.click.CreditCardClick
-import com.bsd.specialproject.ui.addcreditcard.model.CreditCardModel
+import com.bsd.specialproject.ui.addcreditcard.model.CreditCardResponse
 import com.bsd.specialproject.utils.loadImage
 import com.bsd.specialproject.utils.toDefaultValue
-import timber.log.Timber
 
 class CreditCardViewHolder(
     private val binding: ItemCreditCardViewBinding,
@@ -34,7 +33,7 @@ class CreditCardViewHolder(
         }
     }
 
-    fun bind(item: CreditCardModel) {
+    fun bind(item: CreditCardResponse) {
         with(binding) {
             loadImage(
                 url = item.imageUrl.toDefaultValue(),

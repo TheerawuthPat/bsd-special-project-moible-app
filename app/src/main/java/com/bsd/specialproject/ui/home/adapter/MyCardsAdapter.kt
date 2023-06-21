@@ -5,29 +5,29 @@ import androidx.recyclerview.widget.*
 import com.bsd.specialproject.R
 import com.bsd.specialproject.constants.CashbackType
 import com.bsd.specialproject.ui.addcreditcard.adapter.click.CreditCardClick
-import com.bsd.specialproject.ui.addcreditcard.model.CreditCardModel
+import com.bsd.specialproject.ui.addcreditcard.model.CreditCardResponse
 import com.bsd.specialproject.ui.home.viewholder.*
 
 class MyCardsAdapter(
     private val onClick: (CreditCardClick) -> Unit
-) : ListAdapter<CreditCardModel, RecyclerView.ViewHolder>(DIFF_COMPARATOR) {
+) : ListAdapter<CreditCardResponse, RecyclerView.ViewHolder>(DIFF_COMPARATOR) {
 
     companion object {
         const val PERCENT_VIEW_TYPE = R.layout.item_my_credit_card_view
         const val STEP_VIEW_TYPE = R.layout.item_my_credit_card_step_view
         const val EMPTY_VIEW_TYPE = R.layout.item_empty_view
 
-        val DIFF_COMPARATOR = object : DiffUtil.ItemCallback<CreditCardModel>() {
+        val DIFF_COMPARATOR = object : DiffUtil.ItemCallback<CreditCardResponse>() {
             override fun areItemsTheSame(
-                oldItem: CreditCardModel,
-                newItem: CreditCardModel
+                oldItem: CreditCardResponse,
+                newItem: CreditCardResponse
             ): Boolean {
                 return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: CreditCardModel,
-                newItem: CreditCardModel
+                oldItem: CreditCardResponse,
+                newItem: CreditCardResponse
             ): Boolean {
                 return oldItem == newItem
             }

@@ -1,4 +1,4 @@
-package com.bsd.specialproject.ui.addcreditcard.model
+package com.bsd.specialproject.ui.common.model
 
 import com.google.gson.annotations.SerializedName
 

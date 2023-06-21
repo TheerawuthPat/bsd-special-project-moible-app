@@ -1,8 +1,7 @@
 package com.bsd.specialproject.ui.searchresult.model
 
-import com.bsd.specialproject.ui.addcreditcard.model.CashbackCondition
-import com.bsd.specialproject.ui.addcreditcard.model.CreditCardModel
-import com.bsd.specialproject.utils.toDefaultValue
+import com.bsd.specialproject.ui.addcreditcard.model.CreditCardResponse
+import com.bsd.specialproject.utils.*
 
 data class CreditCardSearchResultModel(
     val name: String,
@@ -15,7 +14,7 @@ data class CreditCardSearchResultModel(
     var indexOfCashbackHighest: Int = 0,
 )
 
-fun CreditCardModel.mapToCreditCardSearchResultModel(
+fun CreditCardResponse.mapToCreditCardSearchResultModel(
     estimateSpending: Int,
     earnedCategory: String
 ) = CreditCardSearchResultModel(
@@ -31,17 +30,13 @@ fun CreditCardModel.mapToCreditCardSearchResultModel(
     estimateSpending = estimateSpending.toString()
 )
 
-fun List<CashbackCondition>.getCashbackPerTime(estimateSpending: Int): Int {
-    this.forEach { cbCondition ->
-        if (estimateSpending in (cbCondition.minSpend.toDefaultValue()) until cbCondition.maxSpend.toDefaultValue()) {
-            return cbCondition.cashbackPerTime.toDefaultValue()
+fun List<CreditCardSearchResultModel>.flagCashbackHighest() {
+    val highestBath = this.maxByOrNull { it.cashbackEarnedBath }?.cashbackEarnedBath
+
+    this.forEachIndexed { index, creditCardSearchResultModel ->
+        if (creditCardSearchResultModel.cashbackEarnedBath == highestBath) {
+            creditCardSearchResultModel.isCashbackHighest = true
+            creditCardSearchResultModel.indexOfCashbackHighest = index
         }
     }
-    return 0
 }
-
-fun calculatePercentageToBath(estimateSpending: Double, percent: Int): Double {
-    val percentage = percent.toDouble() / 100
-    return estimateSpending * percentage
-}
-

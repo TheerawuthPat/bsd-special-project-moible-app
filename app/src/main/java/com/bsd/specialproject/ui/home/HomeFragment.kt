@@ -3,7 +3,6 @@ package com.bsd.specialproject.ui.home
 import android.os.Bundle
 import android.view.*
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -42,7 +41,7 @@ class HomeFragment : Fragment() {
         } else {
             requireContext().showToastMessage("Denied Location Permission")
         }
-        navigateToSearchResultPage()
+        navigateToSearchResultPage(isGranted)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -155,10 +154,11 @@ class HomeFragment : Fragment() {
         locationPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
-    private fun navigateToSearchResultPage() {
+    private fun navigateToSearchResultPage(isGranted: Boolean) {
         val searchResultModel = SearchResultModel(
             estimateSpend = binding.viewFindingBestOfCard.textInputEditTextFindCard.text.toString().toInt(),
-            categorySpend = binding.viewFindingBestOfCard.autocompleteCategoryMenu.text.toString()
+            categorySpend = binding.viewFindingBestOfCard.autocompleteCategoryMenu.text.toString(),
+            isGrantedLocation = isGranted
         )
         appRouter.toSearchResult(requireActivity(), searchResultModel)
     }

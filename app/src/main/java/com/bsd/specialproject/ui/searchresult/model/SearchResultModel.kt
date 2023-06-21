@@ -6,5 +6,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class SearchResultModel(
     val estimateSpend: Int,
-    val categorySpend: String
+    val categorySpend: String,
+    val isGrantedLocation: Boolean
 ) : Parcelable
