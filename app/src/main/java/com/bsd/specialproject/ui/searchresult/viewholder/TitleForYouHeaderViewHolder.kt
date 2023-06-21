@@ -41,10 +41,12 @@ class TitleForYouHeaderViewHolder(
                 isVisible = isGrantedLocation
                 if (isGrantedLocation) {
                     setBackgroundColor(viewContext.getColor(R.color.blue_light_300))
+                } else {
+                    alpha = 0.3f
                 }
                 setOnClickListener {
                     binding.btnFilterByCashback.apply {
-                        alpha = 0.5f
+                        alpha = 0.3f
                     }
                     setBackgroundColor(viewContext.getColor(R.color.blue_light_300))
                     onClicked?.invoke(PromotionClick.FilterByDistanceClick)
@@ -54,10 +56,12 @@ class TitleForYouHeaderViewHolder(
             btnFilterByCashback.apply {
                 if (!isGrantedLocation) {
                     setBackgroundColor(viewContext.getColor(R.color.blue_light_300))
+                } else {
+                    alpha = 0.3f
                 }
                 setOnClickListener {
                     binding.btnFilterByDistance.apply {
-                        alpha = 0.5f
+                        alpha = 0.3f
                     }
                     setBackgroundColor(viewContext.getColor(R.color.blue_light_300))
                     onClicked?.invoke(PromotionClick.FilterByCashbackClick)

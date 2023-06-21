@@ -135,18 +135,8 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
             intent.getParcelableExtra(SEARCH_RESULT_MODEL)
         )
         searchResultViewModel.searchResultModel.observe(this) {
-            searchResultViewModel.fetchCardResult()
-            if (!it.isGrantedLocation) {
-                searchResultViewModel.fetchPromotion(null)
-            }
-        }
-        searchResultViewModel.creditCardSearchResultList.observe(this) { creditCardResultModelList ->
-            creditCardBenefitAdapter.submitList(creditCardResultModelList)
-        }
-        searchResultViewModel.foryouPromotionList.observe(this) { forYouPromotionList ->
             titleForYouPromotionAdapter.apply {
-                isGrantedLocation =
-                    searchResultViewModel.searchResultModel.value?.isGrantedLocation == true
+                isGrantedLocation = it.isGrantedLocation
                 submitList(
                     listOf(
                         ViewTitleModel(
@@ -156,6 +146,15 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
                     )
                 )
             }
+            searchResultViewModel.fetchCardResult()
+            if (!it.isGrantedLocation) {
+                searchResultViewModel.fetchPromotion(null)
+            }
+        }
+        searchResultViewModel.creditCardSearchResultList.observe(this) { creditCardResultModelList ->
+            creditCardBenefitAdapter.submitList(creditCardResultModelList)
+        }
+        searchResultViewModel.foryouPromotionList.observe(this) { forYouPromotionList ->
             forYouPromotionAdapter.submitList(forYouPromotionList)
         }
     }
