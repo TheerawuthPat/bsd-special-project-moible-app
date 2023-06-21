@@ -10,19 +10,21 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bsd.specialproject.AppRouter
+import com.bsd.specialproject.R
 import com.bsd.specialproject.databinding.ActivitySearchResultBinding
 import com.bsd.specialproject.ui.common.adapter.HorizontalWrapperAdapter
 import com.bsd.specialproject.ui.home.model.ViewTitleModel
 import com.bsd.specialproject.ui.searchresult.adapter.*
 import com.bsd.specialproject.ui.searchresult.adapter.click.PromotionClick
-import com.bsd.specialproject.ui.searchresult.model.MyLocation
-import com.bsd.specialproject.ui.searchresult.model.SearchResultModel
+import com.bsd.specialproject.ui.searchresult.model.*
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.nlopez.smartlocation.OnLocationUpdatedListener
 import io.nlopez.smartlocation.SmartLocation
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
+@RequiresApi(Build.VERSION_CODES.O)
 class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
 
     companion object {
@@ -101,12 +103,14 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
     }
     private val forYouPromotionAdapter by lazy {
         ForYouPromotionAdapter(
-            onClick = {
-
+            onClick = { click ->
+                if (click is PromotionClick.SelectedClick) {
+                    showConfirmDialog(click.item)
+                }
             }
         )
     }
-    val concatAdapter: ConcatAdapter by lazy {
+    private val concatAdapter: ConcatAdapter by lazy {
         val config = ConcatAdapter.Config.Builder().apply {
             setIsolateViewTypes(false)
         }.build()
@@ -157,6 +161,11 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         searchResultViewModel.foryouPromotionList.observe(this) { forYouPromotionList ->
             forYouPromotionAdapter.submitList(forYouPromotionList)
         }
+        searchResultViewModel.savedToMyCards.observe(this) { isSuccessful ->
+            if (isSuccessful) {
+                this@SearchResultActivity.finish()
+            }
+        }
     }
 
     private fun setupToolbar() {
@@ -196,5 +205,19 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         searchResultViewModel.fetchPromotion(myLocation)
         Timber.d("!==! lat: ${latitude}")
         Timber.d("!==! lng: ${longitude}")
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showConfirmDialog(forYouPromotionModel: ForYouPromotionModel) {
+        MaterialAlertDialogBuilder(this@SearchResultActivity)
+            .setTitle(resources.getString(R.string.confirm_save_promotion_title))
+            .setMessage(resources.getString(R.string.confirm_save_promotion_desc))
+            .setNegativeButton(resources.getString(R.string.common_decline)) { dialog, which ->
+                // Respond to negative button press
+            }
+            .setPositiveButton(resources.getString(R.string.common_accept)) { dialog, which ->
+                searchResultViewModel.savedToMyPromotion(forYouPromotionModel)
+            }
+            .show()
     }
 }

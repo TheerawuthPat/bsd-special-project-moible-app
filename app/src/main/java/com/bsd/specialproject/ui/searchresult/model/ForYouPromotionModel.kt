@@ -1,5 +1,6 @@
 package com.bsd.specialproject.ui.searchresult.model
 
+import com.bsd.specialproject.ui.common.model.CashbackCondition
 import com.bsd.specialproject.utils.*
 
 data class ForYouPromotionModel(
@@ -10,7 +11,8 @@ data class ForYouPromotionModel(
     val limitCashbackPerMonth: Int,
     val distance: Float?,
     val cashbackPercent: String,
-    val cashbackEarnedBath: String
+    val cashbackEarnedBath: String,
+    val cashbackConditions: List<CashbackCondition>
 )
 
 fun PromotionListResponse.mapToForYouPromotionModel(
@@ -28,5 +30,6 @@ fun PromotionListResponse.mapToForYouPromotionModel(
     cashbackEarnedBath = calculatePercentageToBath(
         estimateSpending.toDouble(),
         this.cashbackConditions?.getCashbackPerTime(estimateSpending).toDefaultValue()
-    ).toString()
+    ).toString(),
+    cashbackConditions = this.cashbackConditions ?: emptyList()
 )

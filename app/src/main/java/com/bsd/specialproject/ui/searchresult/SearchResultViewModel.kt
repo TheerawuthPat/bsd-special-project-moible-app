@@ -1,10 +1,13 @@
 package com.bsd.specialproject.ui.searchresult
 
 import android.location.Location
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.bsd.specialproject.constants.*
 import com.bsd.specialproject.ui.addcreditcard.model.CreditCardResponse
 import com.bsd.specialproject.ui.searchresult.model.*
+import com.bsd.specialproject.utils.DeviceSettings
 import com.bsd.specialproject.utils.sharedprefer.AppPreference
 import com.bsd.specialproject.utils.toDefaultValue
 import com.google.firebase.firestore.ktx.firestore
@@ -14,12 +17,18 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SearchResultViewModel(private val appPreference: AppPreference) : ViewModel() {
+class SearchResultViewModel(
+    private val appPreference: AppPreference,
+    private val deviceSettings: DeviceSettings
+) : ViewModel() {
     private val creditCardCollectionStore by lazy {
         Firebase.firestore.collection(CREDIT_CARD_LIST)
     }
     private val promotionCollectionStore by lazy {
         Firebase.firestore.collection(PROMOTION_LIST)
+    }
+    private val myUserCollectionStore by lazy {
+        Firebase.firestore.collection(USERS).document(deviceSettings.deviceId)
     }
 
     private val myCreditCardIds by lazy {
@@ -36,6 +45,9 @@ class SearchResultViewModel(private val appPreference: AppPreference) : ViewMode
 
     private var _searchResultModel = MutableLiveData<SearchResultModel>()
     val searchResultModel: LiveData<SearchResultModel> = _searchResultModel
+
+    private var _savedToMyCards = MutableLiveData<Boolean>()
+    val savedToMyCards: LiveData<Boolean> = _savedToMyCards
 
     fun setArgumentModel(searchResultModel: SearchResultModel?) {
         Timber.d("!==! SearchArguments: ${Gson().toJson(searchResultModel)}")
@@ -178,5 +190,23 @@ class SearchResultViewModel(private val appPreference: AppPreference) : ViewMode
         destinationPoint.longitude = promotionLocation?.lng ?: myLocation.lng
 
         return currentLocation.distanceTo(destinationPoint)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun savedToMyPromotion(promotionModel: ForYouPromotionModel) {
+        val myPromotionModel = promotionModel.mapToMyPromotion(
+            _searchResultModel.value?.estimateSpend.toDefaultValue(),
+            0
+        )
+        myUserCollectionStore.collection(MY_PROMOTION)
+            .document(myPromotionModel.id)
+            .set(myPromotionModel)
+            .addOnSuccessListener {
+                _savedToMyCards.postValue(true)
+                Timber.e("Users DocumentSnapshot successfully written!")
+            }
+            .addOnFailureListener { e ->
+                Timber.e("Error writing document", e)
+            }
     }
 }

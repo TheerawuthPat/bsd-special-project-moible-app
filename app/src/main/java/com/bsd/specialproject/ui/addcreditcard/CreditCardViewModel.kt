@@ -1,18 +1,25 @@
 package com.bsd.specialproject.ui.addcreditcard
 
 import androidx.lifecycle.*
-import com.bsd.specialproject.constants.CREDIT_CARD_LIST
+import com.bsd.specialproject.constants.*
 import com.bsd.specialproject.ui.addcreditcard.model.CreditCardResponse
+import com.bsd.specialproject.utils.DeviceSettings
 import com.bsd.specialproject.utils.sharedprefer.AppPreference
 import com.bsd.specialproject.utils.toDefaultValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
-class CreditCardViewModel(private val appPreference: AppPreference) : ViewModel() {
+class CreditCardViewModel(
+    private val appPreference: AppPreference,
+    private val deviceSettings: DeviceSettings
+) : ViewModel() {
 
     private val creditCardCollectionStore by lazy {
         Firebase.firestore.collection(CREDIT_CARD_LIST)
+    }
+    private val usersCollectionStore by lazy {
+        Firebase.firestore.collection(USERS).document(deviceSettings.deviceId)
     }
 
     private val myCreditCardIds by lazy {
@@ -81,11 +88,26 @@ class CreditCardViewModel(private val appPreference: AppPreference) : ViewModel(
         val latestMyCards = mutableListOf<String>()
         latestMyCards.addAll(myCreditCardIds.toDefaultValue() + creditCardIds)
         appPreference.myCreditCards = latestMyCards.toSet()
+        updateMyCardsToFirestore(latestMyCards)
     }
 
     fun removedMyCards(creditCardIds: List<String>) {
         val latestMyCards = mutableListOf<String>()
         latestMyCards.addAll(myCreditCardIds.toDefaultValue() - creditCardIds.toSet())
         appPreference.myCreditCards = latestMyCards.toSet()
+        updateMyCardsToFirestore(latestMyCards)
+    }
+
+    private fun updateMyCardsToFirestore(myCards: List<String>) {
+        val myCreditCard = hashMapOf(
+            MY_CARDS to myCards
+        )
+        usersCollectionStore.set(myCreditCard)
+            .addOnSuccessListener {
+                Timber.e("Users DocumentSnapshot successfully written!")
+            }
+            .addOnFailureListener { e ->
+                Timber.e("Error writing document", e)
+            }
     }
 }

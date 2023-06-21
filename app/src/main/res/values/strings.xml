@@ -29,4 +29,8 @@
     <string name="promotion_distance">ระยะทาง %1$s เมตร</string>
     <string name="cashback_earned_percent">จะได้รับเครดิตเงินคืน: %1$s เปอร์เซ็นต์</string>
     <string name="cashback_earned_to_bath">คิดเป็นจำนวนเงิน %1$s บาท</string>
+    <string name="confirm_save_promotion_title">บันทึกการใช้โปรโมชั่น</string>
+    <string name="confirm_save_promotion_desc">คุณต้องการบันทึกการใช้จ่ายสำหรับโปรโมชั่นนี้ ?</string>
+    <string name="common_accept">ตกลง</string>
+    <string name="common_decline">ยกเลิก</string>
 </resources>
