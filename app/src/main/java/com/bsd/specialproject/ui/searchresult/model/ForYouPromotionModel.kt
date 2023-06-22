@@ -12,7 +12,9 @@ data class ForYouPromotionModel(
     val distance: Float?,
     val cashbackPercent: String,
     val cashbackEarnedBath: String,
-    val cashbackConditions: List<CashbackCondition>
+    val cashbackConditions: List<CashbackCondition>,
+    val creditCardRelation: List<String>,
+    val categoryType: List<String>
 )
 
 fun PromotionListResponse.mapToForYouPromotionModel(
@@ -31,5 +33,7 @@ fun PromotionListResponse.mapToForYouPromotionModel(
         estimateSpending.toDouble(),
         this.cashbackConditions?.getCashbackPerTime(estimateSpending).toDefaultValue()
     ).toString(),
-    cashbackConditions = this.cashbackConditions ?: emptyList()
+    cashbackConditions = this.cashbackConditions.toDefaultValue(),
+    creditCardRelation = this.creditCardRelation.toDefaultValue(),
+    categoryType = this.categoryType.toDefaultValue()
 )

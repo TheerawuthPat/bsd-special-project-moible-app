@@ -11,7 +11,7 @@
     android:gravity="center"
     android:orientation="horizontal"
     android:paddingStart="@dimen/space_1.5"
-    android:paddingTop="@dimen/space_1"
+    android:paddingTop="@dimen/space_4"
     android:paddingEnd="@dimen/space_1.5"
     android:paddingBottom="@dimen/space_1">
 

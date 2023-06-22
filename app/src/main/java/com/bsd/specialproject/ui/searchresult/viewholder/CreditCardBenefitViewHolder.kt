@@ -31,11 +31,6 @@ class CreditCardBenefitViewHolder(
 
     fun bind(item: CreditCardSearchResultModel) {
         with(binding) {
-            loadImage(
-                url = item.image,
-                imageView = ivCreditCard,
-                placeholderRes = R.drawable.placeholder_credit_card,
-            )
             tvCreditCardName.text = item.name
             tvCashbackEarnedCategory.text =
                 viewContext.getString(
@@ -51,10 +46,6 @@ class CreditCardBenefitViewHolder(
                 R.string.estimate_spending,
                 item.estimateSpending
             )
-            if (item.isCashbackHighest) {
-                ivCreditCard.strokeColor = viewContext.getColorStateList(R.color.blue_dark_200)
-                ivCreditCard.strokeWidth = 2f
-            }
         }
     }
 }

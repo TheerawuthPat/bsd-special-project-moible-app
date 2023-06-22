@@ -14,6 +14,8 @@ data class PromotionListResponse(
     val creditCardRelation: List<String>? = null,
     @SerializedName("endDate")
     val endDate: String? = null,
+    @SerializedName("startDate")
+    val startDate: String? = null,
     @SerializedName("id")
     val id: String? = null,
     @SerializedName("limitCashbackPerMonth")
@@ -23,7 +25,5 @@ data class PromotionListResponse(
     @SerializedName("name")
     val name: String? = null,
     @SerializedName("sourceBank")
-    val sourceBank: String? = null,
-    @SerializedName("startDate")
-    val startDate: String? = null
+    val sourceBank: String? = null
 )

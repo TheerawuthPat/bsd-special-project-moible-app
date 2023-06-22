@@ -4,6 +4,7 @@ import com.bsd.specialproject.ui.addcreditcard.model.CreditCardResponse
 import com.bsd.specialproject.utils.*
 
 data class CreditCardSearchResultModel(
+    val id: String,
     val name: String,
     val image: String,
     val earnedCategory: String,
@@ -18,6 +19,7 @@ fun CreditCardResponse.mapToCreditCardSearchResultModel(
     estimateSpending: Int,
     earnedCategory: String
 ) = CreditCardSearchResultModel(
+    id = this.id.toDefaultValue(),
     name = this.name.toDefaultValue(),
     image = this.imageUrl.toDefaultValue(),
     earnedCategory = earnedCategory,
@@ -35,7 +37,7 @@ fun List<CreditCardSearchResultModel>.flagCashbackHighest() {
 
     this.forEachIndexed { index, creditCardSearchResultModel ->
         if (creditCardSearchResultModel.cashbackEarnedBath == highestBath) {
-            creditCardSearchResultModel.isCashbackHighest = true
+//            creditCardSearchResultModel.isCashbackHighest = true
             creditCardSearchResultModel.indexOfCashbackHighest = index
         }
     }

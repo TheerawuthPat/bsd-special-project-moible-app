@@ -7,12 +7,10 @@ import androidx.lifecycle.*
 import com.bsd.specialproject.constants.*
 import com.bsd.specialproject.ui.addcreditcard.model.CreditCardResponse
 import com.bsd.specialproject.ui.searchresult.model.*
-import com.bsd.specialproject.utils.DeviceSettings
+import com.bsd.specialproject.utils.*
 import com.bsd.specialproject.utils.sharedprefer.AppPreference
-import com.bsd.specialproject.utils.toDefaultValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,9 +28,10 @@ class SearchResultViewModel(
     private val myUserCollectionStore by lazy {
         Firebase.firestore.collection(USERS).document(deviceSettings.deviceId)
     }
-
-    private val myCreditCardIds by lazy {
-        appPreference.myCreditCards?.toList()
+    private val myPromotionCollectionStore by lazy {
+        Firebase.firestore.collection(USERS).document(deviceSettings.deviceId).collection(
+            MY_PROMOTION
+        )
     }
 
     private val _creditCardSearchResultList = MutableLiveData<List<CreditCardSearchResultModel>>()
@@ -49,8 +48,40 @@ class SearchResultViewModel(
     private var _savedToMyCards = MutableLiveData<Boolean>()
     val savedToMyCards: LiveData<Boolean> = _savedToMyCards
 
+    private var _myPromotionList = MutableLiveData<List<MyPromotionModel>>()
+    val myPromotionList: LiveData<List<MyPromotionModel>> = _myPromotionList
+
+    private val _theBestOfCreditCard =
+        MediatorLiveData<String>().apply {
+            var bestOfCreditCardId = ""
+            addSource(_myPromotionList) { myPromotionList ->
+                if (myPromotionList.isNotEmpty()) {
+                    Timber.d("!==! MediatorLiveData MyPromotion: ${myPromotionList.firstOrNull()?.cardSelectedId.toDefaultValue()}")
+                    bestOfCreditCardId =
+                        myPromotionList.firstOrNull()?.cardSelectedId.toDefaultValue()
+                    value = bestOfCreditCardId
+                }
+            }
+            addSource(_creditCardSearchResultList) { creditCardResultList ->
+                if (creditCardResultList.isNotEmpty() && bestOfCreditCardId.isEmpty()) {
+                    Timber.d("!==! MediatorLiveData CardResult: ${creditCardResultList.firstOrNull()?.id.toDefaultValue()}")
+                    bestOfCreditCardId = creditCardResultList.firstOrNull()?.id.toDefaultValue()
+                    value = bestOfCreditCardId
+                }
+            }
+            addSource(_foryouPromotionList) { foryouPromotionList ->
+                if (foryouPromotionList.isNotEmpty() && bestOfCreditCardId.isEmpty()) {
+                    Timber.d("!==! MediatorLiveData ForYou: ${foryouPromotionList.firstOrNull()?.creditCardRelation?.firstOrNull()}")
+                    bestOfCreditCardId =
+                        foryouPromotionList.firstOrNull()?.creditCardRelation?.firstOrNull()
+                            .toDefaultValue()
+                    value = bestOfCreditCardId
+                }
+            }
+        }
+    val theBestOfCreditCard = _theBestOfCreditCard
+
     fun setArgumentModel(searchResultModel: SearchResultModel?) {
-        Timber.d("!==! SearchArguments: ${Gson().toJson(searchResultModel)}")
         searchResultModel?.let {
             _searchResultModel.value = it
         }
@@ -87,7 +118,6 @@ class SearchResultViewModel(
                         it.cashbackEarnedBath.toDouble()
                     }
 
-                    Timber.d("!==! CreditCard Result: ${highestCreditCardSorted}")
                     _creditCardSearchResultList.postValue(highestCreditCardSorted)
                 }
                 .addOnFailureListener { exception ->
@@ -193,13 +223,18 @@ class SearchResultViewModel(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun savedToMyPromotion(promotionModel: ForYouPromotionModel) {
+    fun savedToMyPromotion(
+        promotionModel: ForYouPromotionModel,
+        cardSelectedId: String,
+        cardSelectedName: String
+    ) {
         val myPromotionModel = promotionModel.mapToMyPromotion(
             _searchResultModel.value?.estimateSpend.toDefaultValue(),
-            0
+            cardSelectedId,
+            cardSelectedName
         )
         myUserCollectionStore.collection(MY_PROMOTION)
-            .document(myPromotionModel.id)
+            .document(myPromotionModel.id.toDefaultValue() + "_" + cardSelectedId)
             .set(myPromotionModel)
             .addOnSuccessListener {
                 _savedToMyCards.postValue(true)
@@ -208,5 +243,56 @@ class SearchResultViewModel(
             .addOnFailureListener { e ->
                 Timber.e("Error writing document", e)
             }
+    }
+
+    fun fetchMyPromotion() {
+        myPromotionCollectionStore.get().addOnSuccessListener {
+            val myPromotionListModel = it.toObjects(MyPromotionModel::class.java)
+
+            val myPromotionFilter = myPromotionListModel.filter {
+                isCategoryMatchInPromotion(
+                    _searchResultModel.value?.categorySpend?.lowercase().toDefaultValue(),
+                    it.categoryType.toDefaultValue()
+                ) && isMyCardRelatedInPromotion(
+                    appPreference.myCreditCards?.toList().toDefaultValue(),
+                    it.creditCardRelation.toDefaultValue()
+                ) && isEstimateSpendMoreThenMinSpend(
+                    _searchResultModel.value?.estimateSpend.toDefaultValue(),
+                    it.cashbackConditions?.firstOrNull()?.minSpend.toDefaultValue()
+                ) && isCurrentDateInRange(
+                    it.startDate.toDefaultValue(), it.endDate.toDefaultValue()
+                )
+            }
+
+            val myPromotion = myPromotionFilter.map {
+                val totalMoreSpend =
+                    _searchResultModel.value?.estimateSpend.toDefaultValue() + it.moreAccumulateSpend.toDefaultValue()
+                if (_searchResultModel.value?.estimateSpend.toDefaultValue() >= it.moreAccumulateSpend.toDefaultValue()) {
+                    it.criteria = 1
+                } else {
+                    it.criteria = 2
+                }
+                it.moreCashbackPercent =
+                    it.cashbackConditions?.getCashbackPerTime(totalMoreSpend).toDefaultValue()
+                it
+            }
+
+            //check criteria count
+            val firstCriteriaCount = myPromotion.count { it.criteria == 1 }
+            val secondCriteriaCount = myPromotion.count { it.criteria == 2 }
+
+            //sorting by criteria
+            val myPromotionSorted = if (firstCriteriaCount >= secondCriteriaCount) {
+                myPromotion.sortedByDescending {
+                    it.cashbackEarnedBath
+                }
+            } else {
+                myPromotion.sortedBy {
+                    it.remainingDate?.toInt()
+                }
+            }
+
+            _myPromotionList.postValue(myPromotionSorted)
+        }
     }
 }

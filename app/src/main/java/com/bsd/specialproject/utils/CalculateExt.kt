@@ -32,7 +32,7 @@ fun List<CashbackCondition>.calculateMoreAccumulateSpend(
     accumulateSpend: Int,
     limitCashbackPerMonth: Int
 ): Int {
-    if (this.size > 1 ) {
+    if (this.size > 1) {
         this.forEach { cbCondition ->
             if (accumulateSpend in (cbCondition.minSpend.toDefaultValue()) until cbCondition.maxSpend.toDefaultValue()) {
                 return if (cbCondition.maxSpend == UNLIMIT_MAX_SPEND) {
@@ -42,7 +42,7 @@ fun List<CashbackCondition>.calculateMoreAccumulateSpend(
                     )
                     limitCashbackPerMonth - currentCashbackBath.toInt()
                 } else {
-                    cbCondition.maxSpend.toDefaultValue() - accumulateSpend
+                    (cbCondition.maxSpend.toDefaultValue() + 1) - accumulateSpend
                 }
             }
         }

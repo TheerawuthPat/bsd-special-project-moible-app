@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import com.bsd.specialproject.constants.DATE_FORMAT
 import com.bsd.specialproject.ui.common.model.CashbackCondition
 import com.bsd.specialproject.utils.*
+import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -12,22 +13,49 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 
 data class MyPromotionModel(
-    val id: String,
-    val promotionName: String,
-    val accumulateSpend: Int,
-    val moreAccumulateSpend: Int,
-    val cashbackEarnedBath: Double,
-    val moreCashbackEarned: Int,
-    val cashbackConditions: List<CashbackCondition>,
-    val limitCashbackPerMonth: Int,
-    val remainingDate: String,
-    val savedDate: String,
+    @SerializedName("id")
+    val id: String? = null,
+    @SerializedName("promotionName")
+    val promotionName: String? = null,
+    @SerializedName("accumulateSpend")
+    val accumulateSpend: Int? = null,
+    @SerializedName("moreAccumulateSpend")
+    var moreAccumulateSpend: Int? = null,
+    @SerializedName("cashbackEarnedBath")
+    val cashbackEarnedBath: Double? = null,
+    @SerializedName("moreCashbackPercent")
+    var moreCashbackPercent: Int? = null,
+    @SerializedName("moreCashbackEarned")
+    var moreCashbackEarned: Int? = null,
+    @SerializedName("cashbackConditions")
+    val cashbackConditions: List<CashbackCondition>? = null,
+    @SerializedName("limitCashbackPerMonth")
+    val limitCashbackPerMonth: Int? = null,
+    @SerializedName("remainingDate")
+    val remainingDate: String? = null,
+    @SerializedName("savedDate")
+    val savedDate: String? = null,
+    @SerializedName("creditCardRelation")
+    val creditCardRelation: List<String>? = null,
+    @SerializedName("categoryType")
+    val categoryType: List<String>? = null,
+    @SerializedName("endDate")
+    val endDate: String? = null,
+    @SerializedName("startDate")
+    val startDate: String? = null,
+    @SerializedName("criteria")
+    var criteria: Int? = 0,
+    @SerializedName("cardSelectedName")
+    val cardSelectedName: String? = null,
+    @SerializedName("cardSelectedId")
+    val cardSelectedId: String? = null
 )
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun ForYouPromotionModel.mapToMyPromotion(
     estimateSpend: Int,
-    moreCashbackEarned: Int
+    cardSelectedId: String,
+    cardSelectedName: String
 ) = MyPromotionModel(
     id = this.id.toDefaultValue(),
     promotionName = this.name.toDefaultValue(),
@@ -40,11 +68,18 @@ fun ForYouPromotionModel.mapToMyPromotion(
         estimateSpend.toDouble(),
         this.cashbackConditions.getCashbackPerTime(estimateSpend).toDefaultValue()
     ),
-    moreCashbackEarned = moreCashbackEarned,
+    moreCashbackPercent = 0,
+    moreCashbackEarned = 0,
     cashbackConditions = this.cashbackConditions,
     limitCashbackPerMonth = this.limitCashbackPerMonth,
     remainingDate = calculateRemainingDays(this.endDate).toString(),
-    savedDate = getCurrentDay()
+    savedDate = getCurrentDay(),
+    creditCardRelation = listOf(cardSelectedId),
+    categoryType = this.categoryType,
+    startDate = this.startDate,
+    endDate = this.endDate,
+    cardSelectedName = cardSelectedName,
+    cardSelectedId = cardSelectedId
 )
 
 @RequiresApi(Build.VERSION_CODES.O)

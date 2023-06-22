@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/promotionFragment"
-        android:name="com.bsd.specialproject.ui.promotion.PromotionFragment"
+        android:name="com.bsd.specialproject.ui.promotion.MyPromotionFragment"
         android:label="PromotionFragment"
         tools:layout="@layout/fragment_promotion" />
 

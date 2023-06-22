@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
+            android:lines="2"
             android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="16sp"
@@ -30,7 +31,7 @@
             tools:text="ชื่อโปรโมชั่น: BBGON กินอิ่ม" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_more_accumulate_spending"
+            android:id="@+id/tv_accumulate_spending"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -41,10 +42,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_promotion_name"
             app:lineHeight="20dp"
+            tools:text="ค่าใช้จ่ายสะสม: 500 บาท" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_accumulate_cashback"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_accumulate_spending"
+            app:lineHeight="20dp"
+            tools:text="เครเงินคืนสะสม: 500 บาท" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_more_accumulate_spending"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/space_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_accumulate_cashback"
+            app:lineHeight="20dp"
             tools:text="จำนวนเงินที่ต้องสะสมเพิ่ม: 500 บาท" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_cashback_earned"
+            android:id="@+id/tv_more_cashback_earned"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -58,7 +88,7 @@
             tools:text="จะได้รับเครดิตเงินคืน: 300 บาท" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_promotion_expired_date"
+            android:id="@+id/tv_promotion_remaining_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -67,7 +97,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_cashback_earned"
+            app:layout_constraintTop_toBottomOf="@+id/tv_more_cashback_earned"
             app:lineHeight="20dp"
             tools:text="โปรโมชั่นจะหมดอายุภายใน: 30 วัน" />
 
@@ -82,11 +112,9 @@
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_promotion_expired_date"
+            app:layout_constraintTop_toBottomOf="@+id/tv_promotion_remaining_date"
             app:lineHeight="20dp"
             tools:text="ลงทะเบียนไว้เมื่อ: 01/12/2022" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </com.google.android.material.card.MaterialCardView>

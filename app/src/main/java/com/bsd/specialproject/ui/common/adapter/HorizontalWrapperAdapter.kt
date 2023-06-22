@@ -10,8 +10,14 @@ class HorizontalWrapperAdapter(
     private val adapter: RecyclerView.Adapter<*>,
     private val space: Int? = null,
     private val customViewType: Int? = null,
-    private val isDynamicHeight: Boolean = false
+    private val isDynamicHeight: Boolean = false,
 ) : BaseAdapter<RecyclerView.ViewHolder>() {
+    var isScrollToPosition: Int? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
 
     companion object {
         const val VIEW_TYPE = R.layout.view_horizontal_wrapper
@@ -21,13 +27,13 @@ class HorizontalWrapperAdapter(
     override fun getItemViewType(position: Int): Int = customViewType ?: VIEW_TYPE
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        HorizontalWrapperViewHolder.from(parent, space, isDynamicHeight)
+        HorizontalWrapperViewHolder.from(parent, space, isDynamicHeight, isScrollToPosition)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         when (holder) {
-            is HorizontalWrapperViewHolder -> holder.bind(adapter)
+            is HorizontalWrapperViewHolder -> holder.bind(adapter, isScrollToPosition)
         }
     }
 

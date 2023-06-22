@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bsd.specialproject.AppRouter
@@ -20,6 +21,8 @@ import com.bsd.specialproject.ui.searchresult.model.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.nlopez.smartlocation.OnLocationUpdatedListener
 import io.nlopez.smartlocation.SmartLocation
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -53,6 +56,16 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
     private var myLocation: MyLocation? = null
 
     // Adapter
+    private val bestOfCreditCardAdapter by lazy {
+        BestOfCreditCardAdapter({
+
+        })
+    }
+    private val horizontalBestOfCreditCardAdapter by lazy {
+        HorizontalWrapperAdapter(
+            bestOfCreditCardAdapter
+        )
+    }
     private val titleCreditCardBenefitAdapter by lazy {
         TitleWithViewAllAdapter(
             ViewTitleModel(
@@ -92,6 +105,14 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
             }
         )
     }
+    private val horizontalMyPromotionAdapter by lazy {
+        HorizontalWrapperAdapter(
+            myPromotionAdapter
+        )
+    }
+    private val myPromotionEmptyAdapter by lazy {
+        MyPromotionEmptyAdapter()
+    }
     private val titleForYouPromotionAdapter by lazy {
         TitleForYouHeaderAdapter(onClicked = { click ->
             if (click is PromotionClick.FilterByCashbackClick) {
@@ -105,7 +126,7 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         ForYouPromotionAdapter(
             onClick = { click ->
                 if (click is PromotionClick.SelectedClick) {
-                    showConfirmDialog(click.item)
+                    showConfirmCreditCardListDialog(click.item)
                 }
             }
         )
@@ -116,15 +137,16 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         }.build()
         ConcatAdapter(
             config,
+            horizontalBestOfCreditCardAdapter,
             titleCreditCardBenefitAdapter,
             horizontalCreditCardBenefitAdapter,
             titleMyPromotionAdapter,
-            myPromotionAdapter,
+            horizontalMyPromotionAdapter,
+            myPromotionEmptyAdapter,
             titleForYouPromotionAdapter,
             forYouPromotionAdapter
         )
     }
-
     private var _searchResultModel: SearchResultModel? = null
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -150,12 +172,20 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
                     )
                 )
             }
-            searchResultViewModel.fetchCardResult()
-            if (!it.isGrantedLocation) {
-                searchResultViewModel.fetchPromotion(null)
+            lifecycleScope.launch {
+                searchResultViewModel.fetchMyPromotion()
+                delay(1000)
+                searchResultViewModel.fetchCardResult()
+                delay(1000)
+                if (!it.isGrantedLocation) {
+                    searchResultViewModel.fetchPromotion(null)
+                } else {
+                    searchResultViewModel.fetchPromotion(myLocation)
+                }
             }
         }
         searchResultViewModel.creditCardSearchResultList.observe(this) { creditCardResultModelList ->
+//            bestOfCreditCardAdapter.submitList(creditCardResultModelList)
             creditCardBenefitAdapter.submitList(creditCardResultModelList)
         }
         searchResultViewModel.foryouPromotionList.observe(this) { forYouPromotionList ->
@@ -164,6 +194,28 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         searchResultViewModel.savedToMyCards.observe(this) { isSuccessful ->
             if (isSuccessful) {
                 this@SearchResultActivity.finish()
+            }
+        }
+        searchResultViewModel.myPromotionList.observe(this) { myPromotionList ->
+            if (myPromotionList.isNotEmpty()) {
+                concatAdapter.removeAdapter(myPromotionEmptyAdapter)
+                myPromotionAdapter.submitList(myPromotionList)
+            }
+        }
+        searchResultViewModel.theBestOfCreditCard.observe(this) { creditCardId ->
+            lifecycleScope.launch {
+                delay(2000)
+                var scrollToIndex = 0
+                val currentList =
+                    searchResultViewModel.creditCardSearchResultList.value?.mapIndexed { index, creditCardSearchResultModel ->
+                        if (creditCardSearchResultModel.id == creditCardId) {
+                            scrollToIndex = index
+                            creditCardSearchResultModel.isCashbackHighest = true
+                        }
+                        creditCardSearchResultModel
+                    }
+                horizontalBestOfCreditCardAdapter.isScrollToPosition = scrollToIndex
+                bestOfCreditCardAdapter.submitList(currentList)
             }
         }
     }
@@ -202,22 +254,55 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         currentLocation.longitude = 100.52948211475976
         myLocation = MyLocation(currentLocation.latitude, currentLocation.longitude)
 
-        searchResultViewModel.fetchPromotion(myLocation)
         Timber.d("!==! lat: ${latitude}")
         Timber.d("!==! lng: ${longitude}")
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun showConfirmDialog(forYouPromotionModel: ForYouPromotionModel) {
+    private fun showConfirmCreditCardListDialog(forYouPromotionModel: ForYouPromotionModel) {
+        val initChecked = 0
+
+        val creditCardResult =
+            searchResultViewModel.creditCardSearchResultList.value?.filter { creditCardSearchResultModel ->
+                forYouPromotionModel.creditCardRelation.any {
+                    creditCardSearchResultModel.id == it
+                }
+            }
+        val creditCardListName =
+            creditCardResult?.map { creditCardSearchResultModel ->
+                creditCardSearchResultModel.name
+            }
+        val creditCardListIds =
+            creditCardResult?.map { creditCardSearchResultModel ->
+                creditCardSearchResultModel.id
+            }
+
+        var cardSelectedId = ""
+        var cardSelectedName = ""
+
         MaterialAlertDialogBuilder(this@SearchResultActivity)
-            .setTitle(resources.getString(R.string.confirm_save_promotion_title))
-            .setMessage(resources.getString(R.string.confirm_save_promotion_desc))
-            .setNegativeButton(resources.getString(R.string.common_decline)) { dialog, which ->
-                // Respond to negative button press
+            .setTitle(resources.getString(R.string.confirm_save_promotion_desc))
+            .setSingleChoiceItems(
+                creditCardListName?.toTypedArray(),
+                initChecked
+            ) { dialog, which ->
+                // Respond to item chosen
+                cardSelectedId = creditCardListIds?.get(which).toString()
+                cardSelectedName = creditCardListName?.get(which).toString()
+            }
+            .setNeutralButton(resources.getString(R.string.common_decline)) { dialog, which ->
+                // Respond to neutral button press
             }
             .setPositiveButton(resources.getString(R.string.common_accept)) { dialog, which ->
-                searchResultViewModel.savedToMyPromotion(forYouPromotionModel)
+                searchResultViewModel.savedToMyPromotion(
+                    forYouPromotionModel,
+                    cardSelectedId.ifEmpty {
+                        creditCardListIds?.get(0).toString()
+                    },
+                    cardSelectedName.ifEmpty {
+                        creditCardListName?.get(0).toString()
+                    })
             }
+            // Single-choice items (initialized with checked item)
             .show()
     }
 }
