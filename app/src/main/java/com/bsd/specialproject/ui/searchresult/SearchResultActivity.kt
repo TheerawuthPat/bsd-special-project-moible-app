@@ -315,6 +315,9 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
                 // Respond to item chosen
                 cardSelectedId = creditCardListIds?.get(which).toString()
                 cardSelectedName = creditCardListName?.get(which).toString()
+
+                Timber.d("!==! cardSelectedId: ${cardSelectedId}")
+                Timber.d("!==! cardSelectedName: ${cardSelectedName}")
             }
             .setNeutralButton(resources.getString(R.string.common_decline)) { dialog, which ->
                 // Respond to neutral button press

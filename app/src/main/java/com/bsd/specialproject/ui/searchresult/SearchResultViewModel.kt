@@ -232,18 +232,22 @@ class SearchResultViewModel(
         cardSelectedName: String
     ) {
         val myPromotionUpdatedModel = if (_myPromotionList.value?.isNotEmpty() == true) {
-            val currentMyPromotion = _myPromotionList.value?.single {
+            val isHaveThisPromotion = _myPromotionList.value?.any {
                 it.id == promotionModel.id
             }
-            if (currentMyPromotion != null) {
+            if (isHaveThisPromotion.toDefaultValue()) {
+                val currentMyPromotion = _myPromotionList.value?.single {
+                    it.id == promotionModel.id
+                }
                 val currentEstimateSpend = _searchResultModel.value?.estimateSpend.toDefaultValue()
                 val currentAccumulateSpend =
-                    currentMyPromotion.accumulateSpend.toDefaultValue() + currentEstimateSpend
+                    currentMyPromotion?.accumulateSpend?.toDefaultValue()
+                        ?.plus(currentEstimateSpend)
                 promotionModel.mapToMyPromotion(
-                    currentAccumulateSpend,
+                    currentAccumulateSpend.toDefaultValue(),
                     cardSelectedId,
                     cardSelectedName,
-                    currentMyPromotion.savedDate
+                    currentMyPromotion?.savedDate
                 )
             } else {
                 promotionModel.mapToMyPromotion(
