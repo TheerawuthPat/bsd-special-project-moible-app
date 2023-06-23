@@ -51,6 +51,9 @@ class SearchResultViewModel(
     private var _myPromotionList = MutableLiveData<List<MyPromotionModel>>()
     val myPromotionList: LiveData<List<MyPromotionModel>> = _myPromotionList
 
+    private var _strategyCreditCard = MutableLiveData<List<StrategyCreditCardModel>>()
+    val strategyCreditCard: LiveData<List<StrategyCreditCardModel>> = _strategyCreditCard
+
     private val _theBestOfCreditCard =
         MediatorLiveData<String>().apply {
             var bestOfCreditCardId = ""
@@ -228,14 +231,37 @@ class SearchResultViewModel(
         cardSelectedId: String,
         cardSelectedName: String
     ) {
-        val myPromotionModel = promotionModel.mapToMyPromotion(
-            _searchResultModel.value?.estimateSpend.toDefaultValue(),
-            cardSelectedId,
-            cardSelectedName
-        )
+        val myPromotionUpdatedModel = if (_myPromotionList.value?.isNotEmpty() == true) {
+            val currentMyPromotion = _myPromotionList.value?.single {
+                it.id == promotionModel.id
+            }
+            if (currentMyPromotion != null) {
+                val currentEstimateSpend = _searchResultModel.value?.estimateSpend.toDefaultValue()
+                val currentAccumulateSpend =
+                    currentMyPromotion.accumulateSpend.toDefaultValue() + currentEstimateSpend
+                promotionModel.mapToMyPromotion(
+                    currentAccumulateSpend,
+                    cardSelectedId,
+                    cardSelectedName,
+                    currentMyPromotion.savedDate
+                )
+            } else {
+                promotionModel.mapToMyPromotion(
+                    _searchResultModel.value?.estimateSpend.toDefaultValue(),
+                    cardSelectedId,
+                    cardSelectedName
+                )
+            }
+        } else {
+            promotionModel.mapToMyPromotion(
+                _searchResultModel.value?.estimateSpend.toDefaultValue(),
+                cardSelectedId,
+                cardSelectedName
+            )
+        }
         myUserCollectionStore.collection(MY_PROMOTION)
-            .document(myPromotionModel.id.toDefaultValue() + "_" + cardSelectedId)
-            .set(myPromotionModel)
+            .document(myPromotionUpdatedModel.id.toDefaultValue() + "_" + cardSelectedId)
+            .set(myPromotionUpdatedModel)
             .addOnSuccessListener {
                 _savedToMyCards.postValue(true)
                 Timber.e("Users DocumentSnapshot successfully written!")
@@ -294,5 +320,16 @@ class SearchResultViewModel(
 
             _myPromotionList.postValue(myPromotionSorted)
         }
+    }
+
+    fun fetchStrategyCreditCard(isSpitBill: Boolean) {
+        val strategyCreditCardModel = StrategyCreditCardModel(
+            "",
+            "",
+            0,
+            isSpitBill,
+            appPreference.myExpenseLastMonth
+        )
+        _strategyCreditCard.postValue(listOf(strategyCreditCardModel))
     }
 }

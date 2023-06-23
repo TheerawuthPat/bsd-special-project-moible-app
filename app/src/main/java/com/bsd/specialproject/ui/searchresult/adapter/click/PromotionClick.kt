@@ -10,4 +10,6 @@ sealed class PromotionClick {
     object FilterByDistanceClick : PromotionClick()
 
     object FilterByCashbackClick : PromotionClick()
+    object SpitBillClick : PromotionClick()
+    object FullBillClick : PromotionClick()
 }

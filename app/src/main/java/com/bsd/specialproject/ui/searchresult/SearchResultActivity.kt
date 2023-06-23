@@ -54,17 +54,32 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         SmartLocation.with(this).location()
     }
     private var myLocation: MyLocation? = null
+    private var _isSpitBill: Boolean = false
 
     // Adapter
     private val bestOfCreditCardAdapter by lazy {
-        BestOfCreditCardAdapter({
+        BestOfCreditCardAdapter {
 
-        })
+        }
     }
     private val horizontalBestOfCreditCardAdapter by lazy {
         HorizontalWrapperAdapter(
             bestOfCreditCardAdapter
         )
+    }
+    private val titleStrategyHeaderAdapter by lazy {
+        TitleStrategyHeaderAdapter { click ->
+            if (click is PromotionClick.SpitBillClick) {
+                searchResultViewModel.fetchStrategyCreditCard(true)
+            } else {
+                searchResultViewModel.fetchStrategyCreditCard(false)
+            }
+        }
+    }
+    private val strategyCreditCardAdapter by lazy {
+        StrategyCreditCardAdapter {
+
+        }
     }
     private val titleCreditCardBenefitAdapter by lazy {
         TitleWithViewAllAdapter(
@@ -72,9 +87,7 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
                 title = "สิทธิประโยชน์เครดิตเงินคืนของบัตร",
                 isShowViewAll = false
             ),
-            onClick = {
-                // click view all
-            }
+            onClick = {}
         )
     }
     private val creditCardBenefitAdapter by lazy {
@@ -93,9 +106,7 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
                 title = "โปรโมชั่นของฉัน",
                 isShowViewAll = false
             ),
-            onClick = {
-                // click view all
-            }
+            onClick = {}
         )
     }
     private val myPromotionAdapter by lazy {
@@ -140,6 +151,8 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
             horizontalBestOfCreditCardAdapter,
             titleCreditCardBenefitAdapter,
             horizontalCreditCardBenefitAdapter,
+            titleStrategyHeaderAdapter,
+            strategyCreditCardAdapter,
             titleMyPromotionAdapter,
             horizontalMyPromotionAdapter,
             myPromotionEmptyAdapter,
@@ -161,6 +174,17 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
             intent.getParcelableExtra(SEARCH_RESULT_MODEL)
         )
         searchResultViewModel.searchResultModel.observe(this) {
+            titleStrategyHeaderAdapter.apply {
+                isSpitBill = false
+                submitList(
+                    listOf(
+                        ViewTitleModel(
+                            title = "กลยุทย์การใช้จ่ายบัตรเครดิต",
+                            isShowViewAll = false
+                        )
+                    )
+                )
+            }
             titleForYouPromotionAdapter.apply {
                 isGrantedLocation = it.isGrantedLocation
                 submitList(
@@ -176,6 +200,7 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
                 searchResultViewModel.fetchMyPromotion()
                 delay(1000)
                 searchResultViewModel.fetchCardResult()
+                searchResultViewModel.fetchStrategyCreditCard(_isSpitBill)
                 delay(1000)
                 if (!it.isGrantedLocation) {
                     searchResultViewModel.fetchPromotion(null)
@@ -185,7 +210,6 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
             }
         }
         searchResultViewModel.creditCardSearchResultList.observe(this) { creditCardResultModelList ->
-//            bestOfCreditCardAdapter.submitList(creditCardResultModelList)
             creditCardBenefitAdapter.submitList(creditCardResultModelList)
         }
         searchResultViewModel.foryouPromotionList.observe(this) { forYouPromotionList ->
@@ -217,6 +241,9 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
                 horizontalBestOfCreditCardAdapter.isScrollToPosition = scrollToIndex
                 bestOfCreditCardAdapter.submitList(currentList)
             }
+        }
+        searchResultViewModel.strategyCreditCard.observe(this) {
+            strategyCreditCardAdapter.submitList(it)
         }
     }
 

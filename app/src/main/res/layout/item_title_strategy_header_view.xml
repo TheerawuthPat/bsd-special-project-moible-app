@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/space_1.5"
+    android:paddingTop="@dimen/space_4"
+    android:paddingEnd="@dimen/space_1.5"
+    android:paddingBottom="@dimen/space_1">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grayscale_dark_300"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lineHeight="20dp"
+        tools:text="กลยุทธ์การใช้จ่ายบัตรเครดิต" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:id="@+id/btn_spit_bill"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="@dimen/space_1"
+        android:text="แบ่งจ่าย"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:id="@+id/btn_full_bill"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="@dimen/space_1"
+        android:text="จ่ายเต็ม"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_spit_bill"
+        app:layout_constraintStart_toEndOf="@+id/btn_spit_bill"
+        app:layout_constraintTop_toTopOf="@+id/btn_spit_bill" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

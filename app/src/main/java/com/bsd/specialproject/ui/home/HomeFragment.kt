@@ -13,6 +13,7 @@ import com.bsd.specialproject.R
 import com.bsd.specialproject.databinding.FragmentHomeBinding
 import com.bsd.specialproject.ui.addcreditcard.CreditCardViewModel
 import com.bsd.specialproject.ui.home.adapter.MyCardsAdapter
+import com.bsd.specialproject.ui.promotion.MyPromotionViewModel
 import com.bsd.specialproject.ui.searchresult.model.SearchResultModel
 import com.bsd.specialproject.utils.*
 import com.bsd.specialproject.utils.sharedprefer.AppPreference
@@ -25,6 +26,7 @@ class HomeFragment : Fragment() {
     private val appPreference: AppPreference by inject()
     private val viewModel: HomeViewModel by viewModel()
     private val creditCardViewModel: CreditCardViewModel by viewModel()
+    private val myPromotionViewModel: MyPromotionViewModel by viewModel()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -48,9 +50,14 @@ class HomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
         creditCardViewModel.fetchMyCards()
         viewModel.fetchMyExpense()
+        myPromotionViewModel.fetchMyPromotion()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -88,11 +95,25 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+        myPromotionViewModel.myPromotionList.observe(viewLifecycleOwner) { myPromotionList ->
+            val isNearlyExpiredPromotion = myPromotionList.any {
+                it.remainingDate?.toInt().toDefaultValue() <= 7
+            }
+            if (isNearlyExpiredPromotion) {
+                activity?.showCustomSnackBar(
+                    drawable = R.drawable.ic_info,
+                    message = "คุณมีโปรโมชั่นที่ใกล้หมดอายุ",
+                    mainBgId = R.color.red_300,
+                    setGravityTop = true
+                )
+            }
+        }
     }
 
     private fun initRecyclerView() {
         with(binding.rvMyCards) {
-            val horizontalLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+            val horizontalLayoutManager =
+                LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
             layoutManager = horizontalLayoutManager
             adapter = myCardsAdapter
         }
@@ -132,7 +153,8 @@ class HomeFragment : Fragment() {
 
     private fun setupCategoryDropDownMenu() {
         val categoryMenuName = resources.getStringArray(R.array.category_menu)
-        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.item_category_dropdown, categoryMenuName)
+        val arrayAdapter =
+            ArrayAdapter(requireContext(), R.layout.item_category_dropdown, categoryMenuName)
         with(binding.viewFindingBestOfCard) {
             autocompleteCategoryMenu.apply {
                 setAdapter(arrayAdapter)
@@ -142,7 +164,9 @@ class HomeFragment : Fragment() {
                 }
             }
             textInputEditTextFindCard.doAfterTextChanged {
-                btnFind.isEnabled = it.toString().isNotEmpty() && autocompleteCategoryMenu.text.toString().isNotEmpty()
+                btnFind.isEnabled =
+                    it.toString().isNotEmpty() && autocompleteCategoryMenu.text.toString()
+                        .isNotEmpty()
             }
             btnFind.setOnClickListener {
                 handleRequestLocationPermission()
@@ -156,7 +180,8 @@ class HomeFragment : Fragment() {
 
     private fun navigateToSearchResultPage(isGranted: Boolean) {
         val searchResultModel = SearchResultModel(
-            estimateSpend = binding.viewFindingBestOfCard.textInputEditTextFindCard.text.toString().toInt(),
+            estimateSpend = binding.viewFindingBestOfCard.textInputEditTextFindCard.text.toString()
+                .toInt(),
             categorySpend = binding.viewFindingBestOfCard.autocompleteCategoryMenu.text.toString(),
             isGrantedLocation = isGranted
         )

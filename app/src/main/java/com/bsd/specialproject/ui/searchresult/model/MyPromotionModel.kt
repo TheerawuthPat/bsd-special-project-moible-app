@@ -55,7 +55,8 @@ data class MyPromotionModel(
 fun ForYouPromotionModel.mapToMyPromotion(
     estimateSpend: Int,
     cardSelectedId: String,
-    cardSelectedName: String
+    cardSelectedName: String,
+    updateSaveDate: String? = null
 ) = MyPromotionModel(
     id = this.id.toDefaultValue(),
     promotionName = this.name.toDefaultValue(),
@@ -73,7 +74,7 @@ fun ForYouPromotionModel.mapToMyPromotion(
     cashbackConditions = this.cashbackConditions,
     limitCashbackPerMonth = this.limitCashbackPerMonth,
     remainingDate = calculateRemainingDays(this.endDate).toString(),
-    savedDate = getCurrentDay(),
+    savedDate = updateSaveDate ?: getCurrentDay(),
     creditCardRelation = listOf(cardSelectedId),
     categoryType = this.categoryType,
     startDate = this.startDate,

@@ -1,0 +1,72 @@
+package com.bsd.specialproject.ui.searchresult.adapter
+
+import android.view.ViewGroup
+import androidx.recyclerview.widget.*
+import com.bsd.specialproject.R
+import com.bsd.specialproject.ui.home.model.ViewTitleModel
+import com.bsd.specialproject.ui.home.viewholder.EmptyViewHolder
+import com.bsd.specialproject.ui.searchresult.adapter.click.PromotionClick
+import com.bsd.specialproject.ui.searchresult.viewholder.TitleStrategyHeaderViewHolder
+
+class TitleStrategyHeaderAdapter(
+    private val onClicked: (PromotionClick) -> Unit
+) : ListAdapter<ViewTitleModel, RecyclerView.ViewHolder>(DIFF_COMPARATOR) {
+
+    companion object {
+        const val TITLE_STRATEGY_HEADER_VIEW_TYPE = R.layout.item_title_strategy_header_view
+        const val EMPTY_VIEW_TYPE = R.layout.item_empty_view
+
+        val DIFF_COMPARATOR = object : DiffUtil.ItemCallback<ViewTitleModel>() {
+            override fun areItemsTheSame(
+                oldItem: ViewTitleModel,
+                newItem: ViewTitleModel
+            ): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(
+                oldItem: ViewTitleModel,
+                newItem: ViewTitleModel
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
+
+    var isSpitBill: Boolean = false
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            TITLE_STRATEGY_HEADER_VIEW_TYPE -> {
+                TitleStrategyHeaderViewHolder.from(parent, onClicked)
+            }
+
+            else -> {
+                EmptyViewHolder.from(parent)
+            }
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        getItem(position)?.let {
+            when (getItemViewType(position)) {
+                TITLE_STRATEGY_HEADER_VIEW_TYPE -> {
+                    (holder as TitleStrategyHeaderViewHolder).bind(it, isSpitBill)
+                }
+                else -> {}
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (getItem(position) != null) {
+            TITLE_STRATEGY_HEADER_VIEW_TYPE
+        } else {
+            EMPTY_VIEW_TYPE
+        }
+    }
+}
