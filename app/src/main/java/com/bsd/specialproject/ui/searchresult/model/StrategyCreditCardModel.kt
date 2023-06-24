@@ -2,10 +2,9 @@ package com.bsd.specialproject.ui.searchresult.model
 
 import com.bsd.specialproject.ui.common.model.CashbackCondition
 import com.bsd.specialproject.utils.*
-import timber.log.Timber
 
 sealed class StrategyCreditCardModel {
-    class SpitBillModel(
+    class SplitBillModel(
         val estimateSpend: String,
         val mustCreditCardSpends: List<MustCreditCardSpendModel>,
         val balanceCreditCardSpends: List<BalanceCreditCardSpendModel>,

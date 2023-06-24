@@ -61,7 +61,7 @@ class StrategyCreditCardAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             SPIT_BILL_VIEW_TYPE -> {
-                (holder as StrategySpitBillViewHolder).bind(getItem(position))
+                (holder as StrategySpitBillViewHolder).bind(getItem(position)as StrategyCreditCardModel.SplitBillModel)
             }
             FULL_BILL_VIEW_TYPE -> {
                 (holder as StrategyFullBillViewHolder).bind(getItem(position) as StrategyCreditCardModel.FullBillModel)
@@ -70,7 +70,7 @@ class StrategyCreditCardAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (getItem(position) is StrategyCreditCardModel.SpitBillModel) {
+        return if (getItem(position) is StrategyCreditCardModel.SplitBillModel) {
             SPIT_BILL_VIEW_TYPE
         } else {
             FULL_BILL_VIEW_TYPE

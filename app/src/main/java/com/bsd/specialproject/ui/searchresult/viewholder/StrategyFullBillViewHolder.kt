@@ -72,6 +72,19 @@ class StrategyFullBillViewHolder(
                             tvCardOfBalanceSpendSecond.isVisible = false
                         }
                     }
+                    2 -> {
+                        if (balanceCreditCardSpendModel.cashbackEarned != 0) {
+                            tvCardOfBalanceSpendThird.text = viewContext.getString(
+                                R.string.full_bill_balance_credit_card_spend,
+                                balanceCreditCardSpendModel.creditCardName,
+                                balanceCreditCardSpendModel.balanceSpendForMaximumCashback.toString(),
+                                balanceCreditCardSpendModel.cashbackEarned.toString()
+                            )
+                            tvCardOfBalanceSpendThird.isVisible = true
+                        } else {
+                            tvCardOfBalanceSpendThird.isVisible = false
+                        }
+                    }
                 }
             }
             tvTotalCashbackOfMonth.text = viewContext.getString(

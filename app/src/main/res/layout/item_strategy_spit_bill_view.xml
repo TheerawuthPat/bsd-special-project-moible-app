@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="@dimen/space_.5"
     app:cardCornerRadius="@dimen/radius_1"
     app:cardElevation="@dimen/space_.5">
@@ -12,11 +13,11 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_must_spend_spit_bill"
+            android:id="@+id/tv_must_spend_split_bill"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_1"
-            android:text="ถ้าต้องใช้จ่าย 30,000 บาท โดยแบ่งจ่าย"
+            tools:text="ถ้าต้องใช้จ่าย 30,000 บาท โดยแบ่งจ่าย"
             android:textColor="@color/grayscale_dark_300"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -25,35 +26,57 @@
             app:lineHeight="20dp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_card_of_spit_bill"
+            android:id="@+id/tv_card_of_split_bill_first"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_1"
-            android:text="บัตร Krungsri Now:\nแบ่งจ่ายยอดที่ 1: 6000 บาท ได้รับเครดิตเงินคืนเต็ม 300 บาท\nบัตร Krungsri Visa\n
-แบ่งจ่ายยอดที่ 2: 9000 บาท ได้รับเครดิตเงินคืนเต็ม 300 บาท\nบัตร TTB So Smart:\nแบ่งจ่ายยอดที่ 3: 15000 บาท ได้รับเครดิตเงินคืน 150 บาท"
+            tools:text="บัตร Krungsri Now:\nแบ่งจ่ายยอดที่ 1: 6000 บาท ได้รับเครดิตเงินคืนเต็ม 300 บาท"
             android:textColor="@color/grayscale_dark_300"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_must_spend_spit_bill"
+            app:layout_constraintTop_toBottomOf="@+id/tv_must_spend_split_bill"
+            app:lineHeight="20dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_card_of_split_bill_second"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_1"
+            tools:text="บัตร Krungsri Visa\nแบ่งจ่ายยอดที่ 2: 9000 บาท ได้รับเครดิตเงินคืนเต็ม 300 บาท"
+            android:textColor="@color/grayscale_dark_300"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_card_of_split_bill_first"
+            app:lineHeight="20dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_card_of_split_bill_third"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_1"
+            tools:text="บัตร TTB So Smart:\nแบ่งจ่ายยอดที่ 3: 15000 บาท ได้รับเครดิตเงินคืน 150 บาท"
+            android:textColor="@color/grayscale_dark_300"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_card_of_split_bill_second"
             app:lineHeight="20dp" />
 
         <View
             android:id="@+id/view_divider"
             android:layout_width="0dp"
             android:layout_height="2dp"
-            android:layout_marginHorizontal="@dimen/space_1"
-            android:layout_marginTop="@dimen/space_.5"
+            android:layout_margin="@dimen/space_1"
             android:background="@color/grayscale_light_300"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_card_of_spit_bill" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_card_of_split_bill_third" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_balance_spend"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_1"
-            android:text="เงินคงเหลือที่คาดว่าจะใช้จ่ายได้: 5000 บาท\nจากค่าใช้จ่ายย้อนหลังเดือนที่แล้ว"
+            tools:text="เงินคงเหลือที่คาดว่าจะใช้จ่ายได้: 5000 บาท\nจากค่าใช้จ่ายย้อนหลังเดือนที่แล้ว"
             android:textColor="@color/grayscale_dark_300"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -63,11 +86,11 @@
             app:lineHeight="20dp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_card_of_balance_spend"
+            android:id="@+id/tv_card_of_balance_spend_first"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_1"
-            android:text="บัตร TTB So Fast: จะได้รับเครดิตเงินคืน 50 บาท"
+            tools:text="บัตร TTB So Fast: จะได้รับเครดิตเงินคืน 50 บาท"
             android:textColor="@color/grayscale_dark_300"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -81,13 +104,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_1"
             android:layout_marginTop="@dimen/space_2"
-            android:text="ผลรวมเครดิตเงินคืนที่คาดว่าจะได้รับทั้งหมด: 800 บาท"
+            tools:text="ผลรวมเครดิตเงินคืนที่คาดว่าจะได้รับทั้งหมด: 800 บาท"
             android:textColor="@color/blue_dark_300"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_card_of_balance_spend"
+            app:layout_constraintTop_toBottomOf="@+id/tv_card_of_balance_spend_first"
             app:lineHeight="20dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

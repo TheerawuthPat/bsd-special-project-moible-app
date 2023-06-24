@@ -92,7 +92,7 @@
             android:textColor="@color/grayscale_dark_300"
             android:textSize="16sp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/tv_total_cashback_of_month"
+            app:layout_constraintBottom_toTopOf="@+id/tv_card_of_balance_spend_third"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -100,6 +100,21 @@
             app:lineHeight="20dp"
             tools:text="บัตร TTB So Fast: ได้รับเครดิตเงินคืน 150 บาท" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_card_of_balance_spend_third"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_1"
+            android:textColor="@color/grayscale_dark_300"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/tv_total_cashback_of_month"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_card_of_balance_spend_second"
+            app:lineHeight="20dp"
+            tools:text="บัตร TTB So Fast: ได้รับเครดิตเงินคืน 150 บาท" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_total_cashback_of_month"
@@ -114,7 +129,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_card_of_balance_spend_second"
+            app:layout_constraintTop_toBottomOf="@+id/tv_card_of_balance_spend_third"
             app:lineHeight="20dp"
             tools:text="ผลรวมเครดิตเงินคืนที่คาดว่าจะได้รับทั้งหมด: 450 บาท" />
 

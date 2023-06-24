@@ -338,7 +338,7 @@ class SearchResultViewModel(
                 "",
                 ""
             )
-        val spitBillModel = StrategyCreditCardModel.SpitBillModel(
+        var splitBillModel = StrategyCreditCardModel.SplitBillModel(
             "",
             emptyList(),
             emptyList(),
@@ -381,6 +381,11 @@ class SearchResultViewModel(
         //step4: Mapping data to FullBill and SplitBill
         if (isSpitBill) {
             // SpitBill
+            val mustCreditCards = mutableListOf<MustCreditCardSpendModel>()
+            val balanceCreditCards = mutableListOf<BalanceCreditCardSpendModel>()
+            var totalCashback = 0
+
+
         } else {
             // FullBill
             val mustCreditCards = mutableListOf<MustCreditCardSpendModel>()
@@ -421,7 +426,8 @@ class SearchResultViewModel(
                                     )
                                 balanceCreditCards.add(firstBalanceCardResult)
 
-                                balanceSpending = balanceSpendOfMonth - balanceSpendForMaximumCashback
+                                balanceSpending =
+                                    balanceSpendOfMonth - balanceSpendForMaximumCashback
 
                                 Timber.d("!==! UC5-firstBalanceCardResult-name${firstBalanceCardResult.creditCardName}")
                                 Timber.d("!==! UC5-firstBalanceCardResult-balanceSpending: ${balanceSpending}")
@@ -432,12 +438,21 @@ class SearchResultViewModel(
                         }
 
                         else -> {
-                            nextBalanceCardResult =
-                                strategySearchResultModel.mapToBalanceCreditCardSpendModel(
-                                    balanceSpending,
-                                    null,
-                                    balanceSpending
-                                )
+                            if (balanceSpending >= strategySearchResultModel.maximumSpendForCashback) {
+                                nextBalanceCardResult =
+                                    strategySearchResultModel.mapToBalanceCreditCardSpendModel(
+                                        strategySearchResultModel.maximumSpendForCashback,
+                                        null,
+                                        strategySearchResultModel.maximumSpendForCashback
+                                    )
+                            } else {
+                                nextBalanceCardResult =
+                                    strategySearchResultModel.mapToBalanceCreditCardSpendModel(
+                                        balanceSpending,
+                                        null,
+                                        balanceSpending
+                                    )
+                            }
                             if (balanceSpending != 0) {
                                 balanceCreditCards.add(nextBalanceCardResult)
                                 balanceSpending -= nextBalanceCardResult.balanceSpendOfMonth
@@ -476,7 +491,7 @@ class SearchResultViewModel(
         _strategyCreditCard.postValue(
             listOf(
                 if (isSpitBill) {
-                    spitBillModel
+                    splitBillModel
                 } else {
                     fullBillModel
                 }
