@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/space_.5"
@@ -16,34 +17,38 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_1"
-            android:text="ถ้าต้องใช้จ่าย 30,000 บาท โดยจ่ายเต็ม"
             android:textColor="@color/grayscale_dark_300"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tv_card_of_must_spend"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:lineHeight="20dp" />
+            app:layout_constraintVertical_chainStyle="spread"
+            app:lineHeight="20dp"
+            tools:text="ถ้าต้องใช้จ่าย 30,000 บาท โดยจ่ายเต็ม" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_card_of_must_spend"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_1"
-            android:text="บัตร Krungsri Now: ได้รับเครดิตเงินคืนเต็ม 300 บาท"
             android:textColor="@color/grayscale_dark_300"
             android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/view_divider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_must_spend_full_bill"
-            app:lineHeight="20dp" />
+            app:lineHeight="20dp"
+            tools:text="บัตร Krungsri Now: ได้รับเครดิตเงินคืนเต็ม 300 บาท" />
 
         <View
             android:id="@+id/view_divider"
             android:layout_width="0dp"
             android:layout_height="2dp"
-            android:layout_marginHorizontal="@dimen/space_1"
-            android:layout_marginTop="@dimen/space_.5"
+            android:layout_margin="@dimen/space_1"
             android:background="@color/grayscale_light_300"
+            app:layout_constraintBottom_toTopOf="@+id/tv_balance_spend"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_card_of_must_spend" />
 
@@ -52,27 +57,49 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_1"
-            android:text="เงินคงเหลือที่คาดว่าจะใช้จ่ายได้: 5000 บาท\nจากค่าใช้จ่ายย้อนหลังเดือนที่แล้ว"
             android:textColor="@color/grayscale_dark_300"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tv_card_of_balance_spend_first"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_divider"
-            app:lineHeight="20dp" />
+            app:lineHeight="20dp"
+            tools:text="เงินคงเหลือที่คาดว่าจะใช้จ่ายได้: 5000 บาท\nจากค่าใช้จ่ายย้อนหลังเดือนที่แล้ว" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_card_of_balance_spend"
+            android:id="@+id/tv_card_of_balance_spend_first"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_1"
-            android:text="บัตร TTB So Fast: ได้รับเครดิตเงินคืน 150 บาท"
             android:textColor="@color/grayscale_dark_300"
             android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_card_of_balance_spend_second"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_balance_spend"
-            app:lineHeight="20dp" />
+            app:lineHeight="20dp"
+            android:visibility="gone"
+            tools:text="บัตร TTB So Fast: ได้รับเครดิตเงินคืน 150 บาท" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_card_of_balance_spend_second"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_1"
+            android:textColor="@color/grayscale_dark_300"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/tv_total_cashback_of_month"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_card_of_balance_spend_first"
+            app:lineHeight="20dp"
+            tools:text="บัตร TTB So Fast: ได้รับเครดิตเงินคืน 150 บาท" />
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_total_cashback_of_month"
@@ -80,14 +107,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_1"
             android:layout_marginTop="@dimen/space_2"
-            android:text="ผลรวมเครดิตเงินคืนที่คาดว่าจะได้รับทั้งหมด: 450 บาท"
             android:textColor="@color/blue_dark_300"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_card_of_balance_spend"
-            app:lineHeight="20dp" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_card_of_balance_spend_second"
+            app:lineHeight="20dp"
+            tools:text="ผลรวมเครดิตเงินคืนที่คาดว่าจะได้รับทั้งหมด: 450 บาท" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

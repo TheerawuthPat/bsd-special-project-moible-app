@@ -42,6 +42,10 @@ class CreditCardBenefitViewHolder(
                 item.cashbackPercent,
                 item.cashbackEarnedBath
             )
+            tvLimitCashbackPerMonth.text = viewContext.getString(
+                R.string.limit_cashback_per_month,
+                item.limitCashbackPerMonth.toString()
+            )
             tvEstimateSpending.text = viewContext.getString(
                 R.string.estimate_spending,
                 item.estimateSpending

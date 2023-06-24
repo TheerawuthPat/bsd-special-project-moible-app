@@ -200,8 +200,8 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
                 searchResultViewModel.fetchMyPromotion()
                 delay(1000)
                 searchResultViewModel.fetchCardResult()
-                searchResultViewModel.fetchStrategyCreditCard(_isSpitBill)
                 delay(1000)
+                searchResultViewModel.fetchStrategyCreditCard(_isSpitBill)
                 if (!it.isGrantedLocation) {
                     searchResultViewModel.fetchPromotion(null)
                 } else {

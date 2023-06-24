@@ -64,13 +64,13 @@ class StrategyCreditCardAdapter(
                 (holder as StrategySpitBillViewHolder).bind(getItem(position))
             }
             FULL_BILL_VIEW_TYPE -> {
-                (holder as StrategyFullBillViewHolder).bind(getItem(position))
+                (holder as StrategyFullBillViewHolder).bind(getItem(position) as StrategyCreditCardModel.FullBillModel)
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (getItem(position).isSpitBill) {
+        return if (getItem(position) is StrategyCreditCardModel.SpitBillModel) {
             SPIT_BILL_VIEW_TYPE
         } else {
             FULL_BILL_VIEW_TYPE

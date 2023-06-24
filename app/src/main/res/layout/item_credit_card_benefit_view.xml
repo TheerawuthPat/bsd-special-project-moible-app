@@ -62,7 +62,7 @@
             tools:text="3 เปอร์เซ็น คิดเป็นจำนวนเงิน: 200 บาท" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_estimate_spending"
+            android:id="@+id/tv_limit_cashback_per_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_1"
@@ -73,6 +73,21 @@
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_cashback_earned_money"
+            app:lineHeight="20dp"
+            tools:text="เครดิตเงินคืนสูงสุดต่อเดือน: 500 บาท" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_estimate_spending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_limit_cashback_per_month"
             app:lineHeight="20dp"
             tools:text="ของจำนวนเงินที่คาดว่าจะใช้จ่าย 100 บาท" />
 

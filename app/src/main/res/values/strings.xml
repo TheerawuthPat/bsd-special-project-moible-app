@@ -35,4 +35,9 @@
     <string name="confirm_save_promotion_desc">โปรดเลือกบัตรเครดิตท่ืต้องการบันทึกสำหรับโปรโมชั่นนี้</string>
     <string name="common_accept">ตกลง</string>
     <string name="common_decline">ยกเลิก</string>
+    <string name="full_bill_must_spend">ถ้าต้องใช้จ่าย %1$s บาท โดยจ่ายเต็ม</string>
+    <string name="full_bill_credit_card_cashback">บัตร %1$s: ได้รับเครดิตเงินคืน %2$s บาท</string>
+    <string name="full_bill_balance_spend">เงินคงเหลือที่คาดว่าจะใช้จ่ายได้: %1$s บาท\nจากค่าใช้จ่ายย้อนหลังเดือนที่แล้ว</string>
+    <string name="full_bill_balance_credit_card_spend">บัตร %1$s: แนะนำใช้จ่าย %2$s บาท เพื่อรับเครดิตเงินคืน %3$s บาท</string>
+    <string name="total_cashback_earned">ผลรวมเครดิตเงินคืนที่คาดว่าจะได้รับทั้งหมด: %1$s บาท</string>
 </resources>

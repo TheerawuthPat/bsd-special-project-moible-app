@@ -2,6 +2,7 @@ package com.bsd.specialproject.utils
 
 import com.bsd.specialproject.constants.UNLIMIT_MAX_SPEND
 import com.bsd.specialproject.ui.common.model.CashbackCondition
+import timber.log.Timber
 import java.text.DecimalFormat
 
 fun List<CashbackCondition>.getCashbackPerTime(estimateSpending: Int): Int {
@@ -10,7 +11,7 @@ fun List<CashbackCondition>.getCashbackPerTime(estimateSpending: Int): Int {
             return cbCondition.cashbackPerTime.toDefaultValue()
         }
     }
-    return 0
+    return 1
 }
 
 fun calculatePercentageToBath(estimateSpending: Double, percent: Int): Double {
@@ -49,5 +50,25 @@ fun List<CashbackCondition>.calculateMoreAccumulateSpend(
         return 0
     } else {
         return 0
+    }
+}
+
+fun Int.calculateSpendingForCashback(cashbackPercent: Int): Int {
+    return this.div(cashbackPercent) * 100
+}
+
+fun calculateTotalCashback(numbers: List<Int>): Int {
+    var total = 0
+    for (number in numbers) {
+        total += number
+    }
+    return total
+}
+
+fun calculateCashbackEarned(cashbackEarnedBath: Double, limitCashbackPerMonth: Double): Double {
+    return if (cashbackEarnedBath > limitCashbackPerMonth) {
+        limitCashbackPerMonth
+    } else {
+        cashbackEarnedBath
     }
 }

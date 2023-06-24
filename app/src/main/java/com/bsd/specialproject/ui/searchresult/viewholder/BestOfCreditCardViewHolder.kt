@@ -38,7 +38,6 @@ class BestOfCreditCardViewHolder(
                 placeholderRes = R.drawable.placeholder_credit_card,
             )
             if (item.isCashbackHighest) {
-                Timber.d("!==! isCashbackHighest: ${item.isCashbackHighest}")
                 ivCreditCard.strokeColor = viewContext.getColorStateList(R.color.blue_dark_300)
                 ivCreditCard.strokeWidth = 2f
             }
