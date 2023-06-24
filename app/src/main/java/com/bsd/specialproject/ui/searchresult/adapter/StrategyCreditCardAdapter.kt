@@ -7,7 +7,7 @@ import com.bsd.specialproject.ui.home.viewholder.EmptyViewHolder
 import com.bsd.specialproject.ui.searchresult.adapter.click.PromotionClick
 import com.bsd.specialproject.ui.searchresult.model.StrategyCreditCardModel
 import com.bsd.specialproject.ui.searchresult.viewholder.StrategyFullBillViewHolder
-import com.bsd.specialproject.ui.searchresult.viewholder.StrategySpitBillViewHolder
+import com.bsd.specialproject.ui.searchresult.viewholder.StrategySplitBillViewHolder
 
 class StrategyCreditCardAdapter(
     private val onClick: (PromotionClick) -> Unit
@@ -45,7 +45,7 @@ class StrategyCreditCardAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             SPIT_BILL_VIEW_TYPE -> {
-                StrategySpitBillViewHolder.from(parent, onClick)
+                StrategySplitBillViewHolder.from(parent, onClick)
             }
 
             FULL_BILL_VIEW_TYPE -> {
@@ -61,7 +61,7 @@ class StrategyCreditCardAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             SPIT_BILL_VIEW_TYPE -> {
-                (holder as StrategySpitBillViewHolder).bind(getItem(position)as StrategyCreditCardModel.SplitBillModel)
+                (holder as StrategySplitBillViewHolder).bind(getItem(position)as StrategyCreditCardModel.SplitBillModel)
             }
             FULL_BILL_VIEW_TYPE -> {
                 (holder as StrategyFullBillViewHolder).bind(getItem(position) as StrategyCreditCardModel.FullBillModel)

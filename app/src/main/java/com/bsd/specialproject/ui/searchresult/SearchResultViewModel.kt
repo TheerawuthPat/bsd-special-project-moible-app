@@ -368,15 +368,10 @@ class SearchResultViewModel(
         //step2: calculate cashbackEarned of mustToSpend
         val estimateCashbackPerMonthOfCreditCard = _creditCardSearchResultList.value?.map {
             it.mapToStrategySearchResultModel(estimateSpend)
-        }?.map {
-            //step3: check cashbackEarned < limitCashbackPerMonth and assign value
-            if (it.cashbackEarnedBathPerMonth > it.limitCashbackPerMonth.toDouble()) {
-                it.cashbackEarnedBathPerMonth = it.limitCashbackPerMonth.toDouble()
-            }
-            Timber.d("!==! UC5-cashbackEarnedBathPerMonth: ${it.name}-${it.cashbackEarnedBathPerMonth}")
-            it
+        }?.sortedByDescending {
+            it.cashbackPercent
         }
-        Timber.d("!==! UC5-EstimateCashbackPerMonthOfCreditCard: ${estimateCashbackPerMonthOfCreditCard}")
+        Timber.d("!==! UC5-SortedCashbackPercent_CreditCardList: ${estimateCashbackPerMonthOfCreditCard}")
 
         //step4: Mapping data to FullBill and SplitBill
         if (isSpitBill) {
@@ -384,8 +379,156 @@ class SearchResultViewModel(
             val mustCreditCards = mutableListOf<MustCreditCardSpendModel>()
             val balanceCreditCards = mutableListOf<BalanceCreditCardSpendModel>()
             var totalCashback = 0
+            var balanceSpending = 0
+            var balanceMustSpending = 0
+            var firstBalanceCardResult: BalanceCreditCardSpendModel
+            var balanceCashbackEarned = 0
+            var nextBalanceCardResult: BalanceCreditCardSpendModel
 
+            estimateCashbackPerMonthOfCreditCard?.forEachIndexed { index, strategySearchResultModel ->
+                when (index) {
+                    0 -> {
+                        if (estimateSpend >= strategySearchResultModel.maximumSpendForCashback) {
+                            // Continues Calculate Next Must Card
+                            val firstMustCardResult =
+                                strategySearchResultModel.mapToMustCreditCardSpendModel(
+                                    strategySearchResultModel.maximumSpendForCashback,
+                                    null,
+                                    strategySearchResultModel.maximumSpendForCashback
+                                )
+                            mustCreditCards.add(firstMustCardResult)
+                            balanceMustSpending =
+                                estimateSpend - strategySearchResultModel.maximumSpendForCashback
+                            Timber.d("!==! UC5-SPLITBILL-balanceMustSpending > maximumSpend: ${balanceMustSpending}")
+                        } else {
+                            // End of First Must Card
+                            val firstMustCardResult =
+                                strategySearchResultModel.mapToMustCreditCardSpendModel(
+                                    estimateSpend,
+                                    null,
+                                    estimateSpend
+                                )
+                            mustCreditCards.add(firstMustCardResult)
+                            balanceMustSpending -= estimateSpend
+                            Timber.d("!==! UC5-SPLITBILL-balanceMustSpending < maximumSpend: ${balanceMustSpending}")
+                        }
+                    }
 
+                    else -> {
+                        Timber.d("!==! UC5-SPLITBILL-ElseCase: ${strategySearchResultModel.name}")
+                        if (balanceMustSpending != 0) {
+                            if (balanceMustSpending > strategySearchResultModel.maximumSpendForCashback) {
+                                val balanceSpend = strategySearchResultModel.maximumSpendForCashback
+                                val nextMustCardResult =
+                                    strategySearchResultModel.mapToMustCreditCardSpendModel(
+                                        balanceSpend,
+                                        null,
+                                        balanceSpend
+                                    )
+                                mustCreditCards.add(nextMustCardResult)
+                                balanceMustSpending -= balanceSpend
+                                Timber.d("!==! UC5-SPLITBILL-NextBฺalanceMustSpending > maximumSpend: ${balanceMustSpending}")
+                            } else {
+                                val nextMustCardResult =
+                                    strategySearchResultModel.mapToMustCreditCardSpendModel(
+                                        balanceMustSpending,
+                                        null,
+                                        balanceMustSpending
+                                    )
+                                mustCreditCards.add(nextMustCardResult)
+                                balanceMustSpending -= balanceMustSpending
+
+                                Timber.d("!==! UC5-SPLITBILL-NextBฺalanceMustSpending name: ${strategySearchResultModel.name}")
+                                Timber.d("!==! UC5-SPLITBILL-NextBฺalanceMustSpending < maximumSpend: ${balanceMustSpending}")
+                                Timber.d("!==! UC5-SPLITBILL-balanceMustSpending == 0: ${balanceMustSpending}")
+                                Timber.d("!==! UC5-SPLITBILL-balanceSpendOfMonth: ${balanceSpendOfMonth}")
+
+                                if (balanceSpendOfMonth != 0 && nextMustCardResult.cashbackEarned < strategySearchResultModel.limitCashbackPerMonth) {
+                                    balanceSpending = balanceSpendOfMonth
+                                    balanceCashbackEarned = nextMustCardResult.cashbackEarned
+
+                                    val balanceSpendForMaximumCashback =
+                                        strategySearchResultModel.maximumSpendForCashback - nextMustCardResult.balanceSpendOfMonth
+                                    Timber.d("!==! UC5-SPLITBILL firstBalanceCardResult-maximumSpendForCashback ${strategySearchResultModel.maximumSpendForCashback}")
+                                    Timber.d("!==! UC5-SPLITBILL firstBalanceCardResult-balanceSpendOfMonth ${nextMustCardResult.balanceSpendOfMonth}")
+                                    Timber.d("!==! UC5-SPLITBILL firstBalanceCardResult-balanceSpendForMaximumCashback ${balanceSpendForMaximumCashback}")
+
+                                    //add to first balance items
+                                    firstBalanceCardResult =
+                                        strategySearchResultModel.mapToBalanceCreditCardSpendModel(
+                                            balanceSpendOfMonth,
+                                            balanceCashbackEarned,
+                                            balanceSpendForMaximumCashback
+                                        )
+                                    balanceCreditCards.add(firstBalanceCardResult)
+
+                                    balanceSpending =
+                                        balanceSpendOfMonth - balanceSpendForMaximumCashback
+
+                                    Timber.d("!==! UC5-SPLITBILL firstBalanceCardResult-name: ${firstBalanceCardResult.creditCardName}")
+                                    Timber.d("!==! UC5-SPLITBILL firstBalanceCardResult-balanceSpending: ${balanceSpending}")
+                                    Timber.d("!==! UC5-SPLITBILL firstBalanceCardResult-cashbackEarned: ${firstBalanceCardResult.cashbackEarned}")
+                                } else {
+                                    Timber.d("!==! UC5-SPLITBILL SecondBalanceCardResult-name: ${strategySearchResultModel.name}")
+                                }
+                            }
+                        } else {
+                            Timber.d("!==! UC5-SplitBill: Continues Calculate Next Balance Credit Card")
+                            balanceSpending = if(balanceSpending == 0) {
+                                balanceSpendOfMonth
+                            } else {
+                                balanceSpending
+                            }
+
+                            Timber.d("!==! UC5-SplitBill-balanceSpendOfMonth: ${balanceSpendOfMonth}")
+                            Timber.d("!==! UC5-SplitBill-balanceSpending: ${balanceSpending}")
+
+                            nextBalanceCardResult =
+                                if (balanceSpending >= strategySearchResultModel.maximumSpendForCashback) {
+                                    strategySearchResultModel.mapToBalanceCreditCardSpendModel(
+                                        strategySearchResultModel.maximumSpendForCashback,
+                                        null,
+                                        strategySearchResultModel.maximumSpendForCashback
+                                    )
+                                } else {
+                                    strategySearchResultModel.mapToBalanceCreditCardSpendModel(
+                                        balanceSpending,
+                                        null,
+                                        balanceSpending
+                                    )
+                                }
+                            if (balanceSpending != 0) {
+                                balanceCreditCards.add(nextBalanceCardResult)
+                                balanceSpending -= nextBalanceCardResult.balanceSpendOfMonth
+                            }
+                            Timber.d("!==! UC5-SplitBill nextBalanceCardResult-name${nextBalanceCardResult.creditCardName}")
+                            Timber.d("!==! UC5-SplitBill nextBalanceCardResult-balanceSpending: ${balanceSpending}")
+                            Timber.d("!==! UC5-SplitBill nextBalanceCardResult-cashbackEarned: ${nextBalanceCardResult.cashbackEarned}")
+                        }
+                    }
+                }
+            }
+            //step5: calculate total cashback
+            mustCreditCards.forEach {
+                totalCashback += it.cashbackEarned
+            }
+            balanceCreditCards.forEach {
+                totalCashback += it.cashbackEarned
+            }
+
+            Timber.d("!==! UC5-SPLITBill mustCreditCards: ${mustCreditCards}")
+            Timber.d("!==! UC5-SPLITBill balanceCreditCards: ${balanceCreditCards}")
+            Timber.d("!==! UC5-SPLITBill TotalCashback: ${totalCashback}")
+
+            //map model to show
+            splitBillModel = StrategyCreditCardModel.SplitBillModel(
+                estimateSpend = estimateSpend.toString(),
+                mustCreditCardSpends = mustCreditCards,
+                balanceCreditCardSpends = balanceCreditCards,
+                totalCashback = totalCashback,
+                myExpenseLastMonth = myExpenseLastMonth,
+                balanceSpend = balanceSpendOfMonth.toString()
+            )
         } else {
             // FullBill
             val mustCreditCards = mutableListOf<MustCreditCardSpendModel>()
@@ -394,7 +537,11 @@ class SearchResultViewModel(
 
             if (balanceSpendOfMonth == 0) {
                 estimateCashbackPerMonthOfCreditCard?.first()
-                    ?.mapToMustCreditCardSpendModel(estimateSpend)?.let {
+                    ?.mapToMustCreditCardSpendModel(
+                        estimateSpend,
+                        null,
+                        estimateCashbackPerMonthOfCreditCard.first()?.maximumSpendForCashback.toDefaultValue()
+                    )?.let {
                         mustCreditCards.add(it)
                     }
             } else {
@@ -408,7 +555,9 @@ class SearchResultViewModel(
                         0 -> {
                             val firstMustCardResult =
                                 strategySearchResultModel.mapToMustCreditCardSpendModel(
-                                    estimateSpend
+                                    estimateSpend,
+                                    null,
+                                    strategySearchResultModel.maximumSpendForCashback
                                 )
                             mustCreditCards.add(firstMustCardResult)
 
@@ -429,9 +578,9 @@ class SearchResultViewModel(
                                 balanceSpending =
                                     balanceSpendOfMonth - balanceSpendForMaximumCashback
 
-                                Timber.d("!==! UC5-firstBalanceCardResult-name${firstBalanceCardResult.creditCardName}")
-                                Timber.d("!==! UC5-firstBalanceCardResult-balanceSpending: ${balanceSpending}")
-                                Timber.d("!==! UC5-firstBalanceCardResult-cashbackEarned: ${firstBalanceCardResult.cashbackEarned}")
+                                Timber.d("!==! UC5-FullBill firstBalanceCardResult-name${firstBalanceCardResult.creditCardName}")
+                                Timber.d("!==! UC5-FullBill firstBalanceCardResult-balanceSpending: ${balanceSpending}")
+                                Timber.d("!==! UC5-FullBill firstBalanceCardResult-cashbackEarned: ${firstBalanceCardResult.cashbackEarned}")
                             } else {
                                 balanceSpending = balanceSpendOfMonth
                             }
@@ -457,9 +606,9 @@ class SearchResultViewModel(
                                 balanceCreditCards.add(nextBalanceCardResult)
                                 balanceSpending -= nextBalanceCardResult.balanceSpendOfMonth
                             }
-                            Timber.d("!==! UC5-nextBalanceCardResult-name${nextBalanceCardResult.creditCardName}")
-                            Timber.d("!==! UC5-nextBalanceCardResult-balanceSpending: ${balanceSpending}")
-                            Timber.d("!==! UC5-nextBalanceCardResult-cashbackEarned: ${nextBalanceCardResult.cashbackEarned}")
+                            Timber.d("!==! UC5-FullBill nextBalanceCardResult-name${nextBalanceCardResult.creditCardName}")
+                            Timber.d("!==! UC5-FullBill nextBalanceCardResult-balanceSpending: ${balanceSpending}")
+                            Timber.d("!==! UC5-FullBill nextBalanceCardResult-cashbackEarned: ${nextBalanceCardResult.cashbackEarned}")
                         }
                     }
                 }
@@ -473,9 +622,9 @@ class SearchResultViewModel(
                 totalCashback += it.cashbackEarned
             }
 
-            Timber.d("!==! UC5-mustCreditCards: ${mustCreditCards}")
-            Timber.d("!==! UC5-balanceCreditCards: ${balanceCreditCards}")
-            Timber.d("!==! UC5-TotalCashback: ${totalCashback}")
+            Timber.d("!==! UC5-FullBill mustCreditCards: ${mustCreditCards}")
+            Timber.d("!==! UC5-FullBill balanceCreditCards: ${balanceCreditCards}")
+            Timber.d("!==! UC5-FullBill TotalCashback: ${totalCashback}")
 
             //map model to show
             fullBillModel = StrategyCreditCardModel.FullBillModel(

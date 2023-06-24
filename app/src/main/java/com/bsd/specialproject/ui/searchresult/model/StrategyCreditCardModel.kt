@@ -25,9 +25,9 @@ sealed class StrategyCreditCardModel {
 
 data class MustCreditCardSpendModel(
     val creditCardName: String,
-    val fullSpend: Int,
-    val spendToEarned: Int,
-    val cashbackEarned: Int
+    val balanceSpendOfMonth: Int,
+    val cashbackEarned: Int,
+    val balanceSpendForMaximumCashback: Int
 )
 
 data class BalanceCreditCardSpendModel(
@@ -73,21 +73,21 @@ fun CreditCardSearchResultModel.mapToStrategySearchResultModel(mustToSpend: Int)
         cashbackConditions = this.cashbackConditions.toDefaultValue()
     )
 
-fun StrategySearchResultModel.mapToMustCreditCardSpendModel(estimateSpend: Int) =
-    MustCreditCardSpendModel(
-        creditCardName = this.name,
-        fullSpend = this.mustToSpend,
-        spendToEarned = calculatePercentageToBath(
-            estimateSpend.toDouble(),
-            this.cashbackConditions.getCashbackPerTime(estimateSpend).toDefaultValue()
-        ).toInt(),
-        cashbackEarned = calculateCashbackEarned(
-            calculatePercentageToBath(
-                estimateSpend.toDouble(),
-                this.cashbackConditions.getCashbackPerTime(estimateSpend).toDefaultValue()
-            ), this.limitCashbackPerMonth.toDouble()
-        ).toInt()
-    )
+fun StrategySearchResultModel.mapToMustCreditCardSpendModel(
+    balanceSpendOfMonth: Int,
+    balanceCashEarned: Int?,
+    balanceSpendForMaximumCashback: Int?
+) = MustCreditCardSpendModel(
+    creditCardName = this.name,
+    balanceSpendOfMonth = balanceSpendOfMonth,
+    cashbackEarned = calculateBalanceCashbackEarned(
+        this.cashbackConditions,
+        this.limitCashbackPerMonth,
+        balanceSpendOfMonth,
+        balanceCashEarned
+    ),
+    balanceSpendForMaximumCashback = balanceSpendForMaximumCashback ?: 1
+)
 
 fun StrategySearchResultModel.mapToBalanceCreditCardSpendModel(
     balanceSpendOfMonth: Int,

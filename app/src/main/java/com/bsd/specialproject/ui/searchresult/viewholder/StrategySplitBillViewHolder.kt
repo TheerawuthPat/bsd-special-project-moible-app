@@ -9,7 +9,7 @@ import com.bsd.specialproject.databinding.ItemStrategySpitBillViewBinding
 import com.bsd.specialproject.ui.searchresult.adapter.click.PromotionClick
 import com.bsd.specialproject.ui.searchresult.model.StrategyCreditCardModel
 
-class StrategySpitBillViewHolder(
+class StrategySplitBillViewHolder(
     val binding: ItemStrategySpitBillViewBinding,
     val onClicked: ((PromotionClick) -> Unit)? = null
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -22,10 +22,10 @@ class StrategySpitBillViewHolder(
         fun from(
             parent: ViewGroup,
             onClicked: ((PromotionClick) -> Unit)? = null
-        ): StrategySpitBillViewHolder {
+        ): StrategySplitBillViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ItemStrategySpitBillViewBinding.inflate(layoutInflater, parent, false)
-            return StrategySpitBillViewHolder(binding, onClicked)
+            return StrategySplitBillViewHolder(binding, onClicked)
         }
     }
 
@@ -42,7 +42,8 @@ class StrategySpitBillViewHolder(
                             tvCardOfSplitBillFirst.text = viewContext.getString(
                                 R.string.split_bill_credit_card_cashback,
                                 balanceCreditCardSpendModel.creditCardName,
-                                balanceCreditCardSpendModel.spendToEarned.toString(),
+                                "${index+1}",
+                                balanceCreditCardSpendModel.balanceSpendForMaximumCashback.toString(),
                                 balanceCreditCardSpendModel.cashbackEarned.toString()
                             )
                             tvCardOfSplitBillFirst.isVisible = true
@@ -56,7 +57,8 @@ class StrategySpitBillViewHolder(
                             tvCardOfSplitBillSecond.text = viewContext.getString(
                                 R.string.split_bill_credit_card_cashback,
                                 balanceCreditCardSpendModel.creditCardName,
-                                balanceCreditCardSpendModel.spendToEarned.toString(),
+                                "${index+1}",
+                                balanceCreditCardSpendModel.balanceSpendForMaximumCashback.toString(),
                                 balanceCreditCardSpendModel.cashbackEarned.toString()
                             )
                             tvCardOfSplitBillSecond.isVisible = true
@@ -70,7 +72,8 @@ class StrategySpitBillViewHolder(
                             tvCardOfSplitBillThird.text = viewContext.getString(
                                 R.string.split_bill_credit_card_cashback,
                                 balanceCreditCardSpendModel.creditCardName,
-                                balanceCreditCardSpendModel.spendToEarned.toString(),
+                                "${index+1}",
+                                balanceCreditCardSpendModel.balanceSpendForMaximumCashback.toString(),
                                 balanceCreditCardSpendModel.cashbackEarned.toString()
                             )
                             tvCardOfSplitBillThird.isVisible = true
@@ -97,6 +100,19 @@ class StrategySpitBillViewHolder(
                             tvCardOfBalanceSpendFirst.isVisible = true
                         } else {
                             tvCardOfBalanceSpendFirst.isVisible = false
+                        }
+                    }
+                    1 -> {
+                        if (balanceCreditCardSpendModel.cashbackEarned != 0) {
+                            tvCardOfBalanceSpendSecond.text = viewContext.getString(
+                                R.string.full_bill_balance_credit_card_spend,
+                                balanceCreditCardSpendModel.creditCardName,
+                                balanceCreditCardSpendModel.balanceSpendForMaximumCashback.toString(),
+                                balanceCreditCardSpendModel.cashbackEarned.toString()
+                            )
+                            tvCardOfBalanceSpendSecond.isVisible = true
+                        } else {
+                            tvCardOfBalanceSpendSecond.isVisible = false
                         }
                     }
                 }
