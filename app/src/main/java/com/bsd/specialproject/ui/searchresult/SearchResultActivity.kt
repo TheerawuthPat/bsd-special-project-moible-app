@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bsd.specialproject.AppRouter
 import com.bsd.specialproject.R
 import com.bsd.specialproject.databinding.ActivitySearchResultBinding
+import com.bsd.specialproject.ui.addcreditcard.adapter.click.CreditCardClick
 import com.bsd.specialproject.ui.common.adapter.HorizontalWrapperAdapter
 import com.bsd.specialproject.ui.home.model.ViewTitleModel
 import com.bsd.specialproject.ui.searchresult.adapter.*
@@ -91,8 +92,10 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         )
     }
     private val creditCardBenefitAdapter by lazy {
-        CreditCardBenefitAdapter(onClick = {
-
+        CreditCardBenefitAdapter(onClick = {click ->
+            if(click is CreditCardClick.SavedCashbackEarnedToMyCardClick) {
+                showConfirmSaveToCardBenefit(click.item)
+            }
         })
     }
     private val horizontalCreditCardBenefitAdapter by lazy {
@@ -199,7 +202,7 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
             lifecycleScope.launch {
                 searchResultViewModel.fetchMyPromotion()
                 delay(1000)
-                searchResultViewModel.fetchCardResult()
+                searchResultViewModel.fetchCardBenefitResult()
                 delay(1000)
                 searchResultViewModel.fetchStrategyCreditCard(_isSpitBill)
                 if (!it.isGrantedLocation) {
@@ -215,7 +218,7 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         searchResultViewModel.foryouPromotionList.observe(this) { forYouPromotionList ->
             forYouPromotionAdapter.submitList(forYouPromotionList)
         }
-        searchResultViewModel.savedToMyCards.observe(this) { isSuccessful ->
+        searchResultViewModel.savedToMyPromotion.observe(this) { isSuccessful ->
             if (isSuccessful) {
                 this@SearchResultActivity.finish()
             }
@@ -244,6 +247,11 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         }
         searchResultViewModel.strategyCreditCard.observe(this) {
             strategyCreditCardAdapter.submitList(it)
+        }
+        searchResultViewModel.savedToMyCard.observe(this) {
+            if(it) {
+                searchResultViewModel.fetchCardBenefitResult()
+            }
         }
     }
 
@@ -333,6 +341,17 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
                     })
             }
             // Single-choice items (initialized with checked item)
+            .show()
+    }
+
+    private fun showConfirmSaveToCardBenefit(creditCardSearchResultModel: CreditCardSearchResultModel) {
+        MaterialAlertDialogBuilder(this@SearchResultActivity)
+            .setTitle(resources.getString(R.string.confirm_save_card_benefit_title))
+            .setMessage(resources.getString(R.string.confirm_save_card_benefit_desc))
+            .setNegativeButton(resources.getString(R.string.common_decline)) { _, _ -> }
+            .setPositiveButton(resources.getString(R.string.common_accept)) { _, _ ->
+                searchResultViewModel.savedToCardBenefit(creditCardSearchResultModel)
+            }
             .show()
     }
 }

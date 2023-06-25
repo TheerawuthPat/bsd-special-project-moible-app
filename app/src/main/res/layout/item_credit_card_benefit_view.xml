@@ -31,11 +31,22 @@
             app:lineHeight="20dp"
             tools:text="Krungsri Now" />
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_save_to_my_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
+            android:padding="@dimen/space_.5"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_credit_card_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_credit_card_name"
+            app:srcCompat="@drawable/outline_save_alt_24" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_cashback_earned_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_1"
+            android:layout_marginTop="@dimen/space_.5"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAlignment="textStart"
@@ -50,7 +61,7 @@
             android:id="@+id/tv_cashback_earned_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_1"
+            android:layout_marginTop="@dimen/space_.5"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAlignment="textStart"
@@ -62,10 +73,10 @@
             tools:text="3 เปอร์เซ็น คิดเป็นจำนวนเงิน: 200 บาท" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_limit_cashback_per_month"
+            android:id="@+id/tv_estimate_spending"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_1"
+            android:layout_marginTop="@dimen/space_.5"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAlignment="textStart"
@@ -74,22 +85,47 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_cashback_earned_money"
             app:lineHeight="20dp"
-            tools:text="เครดิตเงินคืนสูงสุดต่อเดือน: 500 บาท" />
+            tools:text="ของจำนวนเงินที่คาดว่าจะใช้จ่าย 100 บาท" />
+
+        <View
+            android:id="@+id/view_divider"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/space_.5"
+            android:background="@color/grayscale_light_300"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_estimate_spending" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_estimate_spending"
+            android:id="@+id/tv_accumulate_cashback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginTop="@dimen/space_.5"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_divider"
+            app:lineHeight="20dp"
+            tools:text="เครดิตเงินคืนสะสม 100 บาท" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_limit_cashback_per_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_.5"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_limit_cashback_per_month"
+            app:layout_constraintTop_toBottomOf="@+id/tv_accumulate_cashback"
             app:lineHeight="20dp"
-            tools:text="ของจำนวนเงินที่คาดว่าจะใช้จ่าย 100 บาท" />
+            tools:text="สะสมได้สูงสุดต่อเดือน: 500 บาท" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

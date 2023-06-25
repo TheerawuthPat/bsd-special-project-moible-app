@@ -10,6 +10,7 @@ import com.bsd.specialproject.ui.addcreditcard.adapter.click.CreditCardClick
 import com.bsd.specialproject.ui.addcreditcard.model.CreditCardResponse
 import com.bsd.specialproject.utils.loadImage
 import com.bsd.specialproject.utils.toDefaultValue
+import timber.log.Timber
 
 class CreditCardViewHolder(
     private val binding: ItemCreditCardViewBinding,
@@ -19,6 +20,9 @@ class CreditCardViewHolder(
 
     private val viewContext by lazy {
         binding.root.context
+    }
+
+    init {
     }
 
     companion object {
@@ -34,6 +38,7 @@ class CreditCardViewHolder(
     }
 
     fun bind(item: CreditCardResponse) {
+        item.isChecked = false
         with(binding) {
             loadImage(
                 url = item.imageUrl.toDefaultValue(),

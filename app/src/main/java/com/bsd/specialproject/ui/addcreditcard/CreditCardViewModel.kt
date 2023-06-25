@@ -18,8 +18,11 @@ class CreditCardViewModel(
     private val creditCardCollectionStore by lazy {
         Firebase.firestore.collection(CREDIT_CARD_LIST)
     }
-    private val usersCollectionStore by lazy {
+    private val myUserCollectionStore by lazy {
         Firebase.firestore.collection(USERS).document(deviceSettings.deviceId)
+    }
+    private val myCardsCollectionStore by lazy {
+        myUserCollectionStore.collection(MY_CARDS)
     }
 
     private val myCreditCardIds by lazy {
@@ -34,27 +37,14 @@ class CreditCardViewModel(
 
     fun fetchMyCards() {
         if (appPreference.myCreditCards?.isNotEmpty().toDefaultValue()) {
-            creditCardCollectionStore
-                .whereIn("id", appPreference.myCreditCards?.toList().toDefaultValue())
-                .get()
-                .addOnSuccessListener { result ->
-                    val myCreditCardList = mutableListOf<CreditCardResponse>()
-                    for (document in result) {
-                        val creditCardResponse = document.toObject(CreditCardResponse::class.java)
-                        myCreditCardList.add(creditCardResponse)
-                    }
-                    _myCardList.postValue(myCreditCardList)
-                }
-                .addOnFailureListener { exception ->
-                    Timber.e("Error getting documents. ${exception}")
-                }
+            fetchMyCardsFromFirebase()
         }
     }
 
     fun fetchAddMoreCreditCard() {
         if (myCreditCardIds?.isNotEmpty().toDefaultValue()) {
             creditCardCollectionStore
-                .whereNotIn("id", myCreditCardIds.toDefaultValue())
+                .whereNotIn(ID, myCreditCardIds.toDefaultValue())
                 .get()
                 .addOnSuccessListener { result ->
                     val creditCardList = mutableListOf<CreditCardResponse>()
@@ -65,7 +55,7 @@ class CreditCardViewModel(
                     _creditCardList.postValue(creditCardList)
                 }
                 .addOnFailureListener { exception ->
-                    Timber.e("Error getting documents. ${exception}")
+                    Timber.e("UC1-AddMoreCard Error getting documents. ${exception}")
                 }
         } else {
             creditCardCollectionStore
@@ -79,7 +69,7 @@ class CreditCardViewModel(
                     _creditCardList.postValue(creditCardList)
                 }
                 .addOnFailureListener { exception ->
-                    Timber.e("Error getting documents. ${exception}")
+                    Timber.e("UC1- AddMoreCard Error getting documents. ${exception}")
                 }
         }
     }
@@ -88,26 +78,61 @@ class CreditCardViewModel(
         val latestMyCards = mutableListOf<String>()
         latestMyCards.addAll(myCreditCardIds.toDefaultValue() + creditCardIds)
         appPreference.myCreditCards = latestMyCards.toSet()
-        updateMyCardsToFirestore(latestMyCards)
+        Timber.d("!==! UC1-AddedCard UpdateMyCreditCardIds: ${latestMyCards}")
+
+        val myCurrentCards = _creditCardList.value?.filter {
+            latestMyCards.contains(it.id.toDefaultValue())
+        }.toDefaultValue()
+
+        Timber.d("!==! UC1-AddedCard CreditCardListToAdded: ${myCurrentCards}")
+        updateMyCardsToFirestore(myCurrentCards, true)
     }
 
     fun removedMyCards(creditCardIds: List<String>) {
         val latestMyCards = mutableListOf<String>()
         latestMyCards.addAll(myCreditCardIds.toDefaultValue() - creditCardIds.toSet())
         appPreference.myCreditCards = latestMyCards.toSet()
-        updateMyCardsToFirestore(latestMyCards)
+        Timber.d("!==! UC1-RemovedCard UpdateMyCreditCardIds: ${latestMyCards}")
+
+        val myCurrentCards = _myCardList.value?.filter {
+            !latestMyCards.contains(it.id.toDefaultValue())
+        }.toDefaultValue()
+
+        Timber.d("!==! UC1-RemovedCard CreditCardListToRemoved: ${myCurrentCards}")
+        updateMyCardsToFirestore(myCurrentCards, false)
     }
 
-    private fun updateMyCardsToFirestore(myCards: List<String>) {
-        val myCreditCard = hashMapOf(
-            MY_CARDS to myCards
-        )
-        usersCollectionStore.set(myCreditCard)
-            .addOnSuccessListener {
-                Timber.e("Users DocumentSnapshot successfully written!")
+    private fun updateMyCardsToFirestore(myCards: List<CreditCardResponse>, isAddedCard: Boolean) {
+        myCards.forEach {
+            if (isAddedCard) {
+                myCardsCollectionStore.document(it.id.toDefaultValue())
+                    .set(it)
+                    .addOnSuccessListener {
+                        Timber.d("UC1-Added CreditCard DocumentSnapshot successfully written!")
+                    }
+                    .addOnFailureListener { e ->
+                        Timber.e("Error writing document", e)
+                    }
+            } else {
+                myCardsCollectionStore.document(it.id.toDefaultValue())
+                    .delete()
+                    .addOnSuccessListener {
+                        Timber.d("UC1-Removed CreditCard DocumentSnapshot successfully written!")
+                    }
+                    .addOnFailureListener { e ->
+                        Timber.e("Error writing document", e)
+                    }
             }
-            .addOnFailureListener { e ->
-                Timber.e("Error writing document", e)
-            }
+        }
+    }
+
+    fun fetchMyCardsFromFirebase() {
+        myCardsCollectionStore.get().addOnSuccessListener {
+            val myCards = it.toObjects(CreditCardResponse::class.java)
+            Timber.d("!==! UC1-FetchMyCreditCards: ${myCards}")
+            _myCardList.postValue(myCards)
+        }.addOnFailureListener {
+            Timber.e("!==! UC1-FetchMyCreditCards: ${it}")
+        }
     }
 }

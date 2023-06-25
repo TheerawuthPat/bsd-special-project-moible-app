@@ -9,6 +9,7 @@ import com.bsd.specialproject.ui.addcreditcard.adapter.CreditCardAdapter
 import com.bsd.specialproject.ui.addcreditcard.adapter.click.CreditCardClick
 import com.bsd.specialproject.utils.toDefaultValue
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class ManageCreditCardFragment : Fragment() {
 
@@ -30,7 +31,11 @@ class ManageCreditCardFragment : Fragment() {
         creditCardViewModel.fetchMyCards()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentManageCreditCardBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -44,12 +49,13 @@ class ManageCreditCardFragment : Fragment() {
     }
 
     private fun bindSavedCardsButton() {
-        val isSelectedCard = creditCardAdapter.currentList?.any { it.isChecked }
-        val creditCardChecked = creditCardAdapter?.currentList?.filter {
+        val isSelectedCard = creditCardAdapter.currentList.any { it.isChecked }
+        val creditCardChecked = creditCardAdapter.currentList.filter {
             it.isChecked
-        }?.map {
+        }.map {
             it.id.toDefaultValue()
         }
+        Timber.d("!==! UC1-RemoveCard: creditCardChecked: ${creditCardChecked}")
 
         with(binding.btnSaved) {
             isEnabled = isSelectedCard.toDefaultValue()

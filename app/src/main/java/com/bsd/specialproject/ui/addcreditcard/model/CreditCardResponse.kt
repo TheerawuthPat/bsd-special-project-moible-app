@@ -20,5 +20,10 @@ data class CreditCardResponse(
     val name: String? = null,
     @SerializedName("sourceBank")
     val sourceBank: String? = null,
-    var isChecked: Boolean = false
+    @SerializedName("isChecked")
+    var isChecked: Boolean = false,
+    @SerializedName("accumulateCashback")
+    var accumulateCashback: Int? = null,
+    @SerializedName("accumulateCashback")
+    var accumulateSpend: Int? = null,
 )

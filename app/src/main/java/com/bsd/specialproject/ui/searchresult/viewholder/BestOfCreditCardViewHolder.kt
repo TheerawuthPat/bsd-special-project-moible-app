@@ -33,7 +33,7 @@ class BestOfCreditCardViewHolder(
     fun bind(item: CreditCardSearchResultModel) {
         with(binding) {
             loadImage(
-                url = item.image,
+                url = item.imageUrl,
                 imageView = ivCreditCard,
                 placeholderRes = R.drawable.placeholder_credit_card,
             )

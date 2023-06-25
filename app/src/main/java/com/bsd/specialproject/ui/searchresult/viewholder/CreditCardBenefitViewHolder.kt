@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bsd.specialproject.R
 import com.bsd.specialproject.databinding.ItemCreditCardBenefitViewBinding
 import com.bsd.specialproject.ui.addcreditcard.adapter.click.CreditCardClick
+import com.bsd.specialproject.ui.searchresult.adapter.click.PromotionClick
 import com.bsd.specialproject.ui.searchresult.model.CreditCardSearchResultModel
 import com.bsd.specialproject.utils.loadImage
 
@@ -42,14 +43,21 @@ class CreditCardBenefitViewHolder(
                 item.cashbackPercent,
                 item.cashbackEarnedBath
             )
-            tvLimitCashbackPerMonth.text = viewContext.getString(
-                R.string.limit_cashback_per_month,
-                item.limitCashbackPerMonth.toString()
-            )
             tvEstimateSpending.text = viewContext.getString(
                 R.string.estimate_spending,
                 item.estimateSpending
             )
+            tvAccumulateCashback.text = viewContext.getString(
+                R.string.accumulate_cashback,
+                item.accumulateCashback.toString()
+            )
+            tvLimitCashbackPerMonth.text = viewContext.getString(
+                R.string.limit_cashback_per_month,
+                item.limitCashbackPerMonth.toString()
+            )
+            ivSaveToMyCard.setOnClickListener {
+                onClicked?.invoke(CreditCardClick.SavedCashbackEarnedToMyCardClick(item))
+            }
         }
     }
 }

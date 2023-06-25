@@ -56,7 +56,7 @@ fun CreditCardSearchResultModel.mapToStrategySearchResultModel(mustToSpend: Int)
     StrategySearchResultModel(
         id = this.id.toDefaultValue(),
         name = this.name.toDefaultValue(),
-        image = this.image.toDefaultValue(),
+        image = this.imageUrl.toDefaultValue(),
         earnedCategory = earnedCategory,
         cashbackPercent = this.cashbackConditions.getCashbackPerTime(mustToSpend)
             .toDefaultValue(),

@@ -21,7 +21,7 @@ class CreditCardBenefitAdapter(
                 oldItem: CreditCardSearchResultModel,
                 newItem: CreditCardSearchResultModel
             ): Boolean {
-                return oldItem.name == newItem.name
+                return oldItem.accumulateCashback == newItem.accumulateCashback
             }
 
             override fun areContentsTheSame(

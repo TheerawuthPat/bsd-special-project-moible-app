@@ -19,6 +19,7 @@ import com.bsd.specialproject.utils.*
 import com.bsd.specialproject.utils.sharedprefer.AppPreference
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class HomeFragment : Fragment() {
 
@@ -73,6 +74,7 @@ class HomeFragment : Fragment() {
             }
         }
         creditCardViewModel.myCardList.observe(viewLifecycleOwner) { myCreditCards ->
+            Timber.d("!==! UC1-UpdateMyCard: ${myCreditCards.map { it.name.toDefaultValue() }}")
             myCardsAdapter.submitList(myCreditCards)
         }
         viewModel.myExpenseLastMonth.observe(viewLifecycleOwner) { myExpense ->

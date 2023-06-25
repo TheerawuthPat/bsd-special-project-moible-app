@@ -28,6 +28,9 @@ class SearchResultViewModel(
     private val myUserCollectionStore by lazy {
         Firebase.firestore.collection(USERS).document(deviceSettings.deviceId)
     }
+    private val myCardsCollectionStore by lazy {
+        myUserCollectionStore.collection(MY_CARDS)
+    }
     private val myPromotionCollectionStore by lazy {
         Firebase.firestore.collection(USERS).document(deviceSettings.deviceId).collection(
             MY_PROMOTION
@@ -45,8 +48,11 @@ class SearchResultViewModel(
     private var _searchResultModel = MutableLiveData<SearchResultModel>()
     val searchResultModel: LiveData<SearchResultModel> = _searchResultModel
 
-    private var _savedToMyCards = MutableLiveData<Boolean>()
-    val savedToMyCards: LiveData<Boolean> = _savedToMyCards
+    private var _savedToMyPromotion = MutableLiveData<Boolean>()
+    val savedToMyPromotion: LiveData<Boolean> = _savedToMyPromotion
+
+    private var _savedToMyCard = MutableLiveData<Boolean>()
+    val savedToMyCard: LiveData<Boolean> = _savedToMyCard
 
     private var _myPromotionList = MutableLiveData<List<MyPromotionModel>>()
     val myPromotionList: LiveData<List<MyPromotionModel>> = _myPromotionList
@@ -90,43 +96,35 @@ class SearchResultViewModel(
         }
     }
 
-    fun fetchCardResult() {
+    fun fetchCardBenefitResult() {
         if (appPreference.myCreditCards?.isNotEmpty().toDefaultValue()) {
-            creditCardCollectionStore
-                .whereIn(ID, appPreference.myCreditCards?.toList().toDefaultValue())
-                .get()
-                .addOnSuccessListener { result ->
-                    val myCreditCardList = mutableListOf<CreditCardResponse>()
-                    for (document in result) {
-                        val creditCardResponse = document.toObject(CreditCardResponse::class.java)
-                        myCreditCardList.add(creditCardResponse)
-                    }
+            myCardsCollectionStore.get().addOnSuccessListener {
+                val myCreditCardList = it.toObjects(CreditCardResponse::class.java)
+                Timber.d("!==! UC2.3-CardBenefitResult: ${myCreditCardList}")
 
-                    val categoryFilter = myCreditCardList.filter {
-                        it.categoryType?.any { categorySpend ->
-                            categorySpend == _searchResultModel.value?.categorySpend?.lowercase()
-                        } == true && _searchResultModel.value?.estimateSpend.toDefaultValue() >= it.cashbackConditions?.firstOrNull()?.minSpend.toDefaultValue()
-                    }
-
-                    val creditCardResultModel = categoryFilter.map {
-                        it.mapToCreditCardSearchResultModel(
-                            _searchResultModel.value?.estimateSpend.toDefaultValue(),
-                            _searchResultModel.value?.categorySpend.toDefaultValue()
-                        )
-                    }
-
-                    creditCardResultModel.toMutableList().flagCashbackHighest()
-
-                    val highestCreditCardSorted = creditCardResultModel.sortedByDescending {
-                        it.cashbackEarnedBath.toDouble()
-                    }
-
-                    Timber.d("!==! CreditCardResult: ${highestCreditCardSorted}")
-                    _creditCardSearchResultList.postValue(highestCreditCardSorted)
+                val categoryFilter = myCreditCardList.filter {
+                    it.categoryType?.any { categorySpend ->
+                        categorySpend == _searchResultModel.value?.categorySpend?.lowercase()
+                    } == true && _searchResultModel.value?.estimateSpend.toDefaultValue() >= it.cashbackConditions?.firstOrNull()?.minSpend.toDefaultValue()
                 }
-                .addOnFailureListener { exception ->
-                    Timber.e("Error getting documents. ${exception}")
+                val creditCardResultModel = categoryFilter.map {
+                    it.mapToCreditCardSearchResultModel(
+                        _searchResultModel.value?.estimateSpend.toDefaultValue(),
+                        _searchResultModel.value?.categorySpend.toDefaultValue()
+                    )
                 }
+
+                creditCardResultModel.toMutableList().flagCashbackHighest()
+
+                val highestCreditCardSorted = creditCardResultModel.sortedByDescending {
+                    it.cashbackEarnedBath.toDouble()
+                }
+                Timber.d("!==! UC2.3-CardBenefitResult SortedHighestCashback: ${highestCreditCardSorted}")
+
+                _creditCardSearchResultList.postValue(highestCreditCardSorted)
+            }.addOnFailureListener {
+                Timber.e("!==! UC2.3-CardBenefitResult Error: ${it}")
+            }
         }
     }
 
@@ -268,7 +266,7 @@ class SearchResultViewModel(
             .document(myPromotionUpdatedModel.id.toDefaultValue() + "_" + cardSelectedId)
             .set(myPromotionUpdatedModel)
             .addOnSuccessListener {
-                _savedToMyCards.postValue(true)
+                _savedToMyPromotion.postValue(true)
                 Timber.e("Users DocumentSnapshot successfully written!")
             }
             .addOnFailureListener { e ->
@@ -474,7 +472,7 @@ class SearchResultViewModel(
                             }
                         } else {
                             Timber.d("!==! UC5-SplitBill: Continues Calculate Next Balance Credit Card")
-                            balanceSpending = if(balanceSpending == 0) {
+                            balanceSpending = if (balanceSpending == 0) {
                                 balanceSpendOfMonth
                             } else {
                                 balanceSpending
@@ -646,5 +644,25 @@ class SearchResultViewModel(
                 }
             )
         )
+    }
+
+    fun savedToCardBenefit(cardBenefitModel: CreditCardSearchResultModel) {
+        val accumulateCashback =
+            cardBenefitModel.accumulateCashback + cardBenefitModel.cashbackEarnedBath.toDouble()
+                .toInt()
+        Timber.d("!==! UpdateCardBenefit-accumulateCashback: ${accumulateCashback}")
+        Timber.d("!==! UpdateCardBenefit-cardBenefitModel.id: ${cardBenefitModel.id}")
+        val updateCreditCardResponse = cardBenefitModel.mapToCreditCardResponseForUpdateMyCard(
+            accumulateCashback
+        )
+        myCardsCollectionStore.document(cardBenefitModel.id)
+            .update(ACCUMULATE_CASHBACK, accumulateCashback)
+            .addOnSuccessListener {
+                _savedToMyCard.postValue(true)
+                Timber.d("Update CardBenefit DocumentSnapshot successfully written!")
+            }
+            .addOnFailureListener { e ->
+                Timber.e("Update CardBenefit Error writing document", e)
+            }
     }
 }
