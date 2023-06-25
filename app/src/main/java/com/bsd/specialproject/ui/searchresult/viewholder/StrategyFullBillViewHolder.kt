@@ -51,7 +51,7 @@ class StrategyFullBillViewHolder(
                             tvCardOfBalanceSpendFirst.text = viewContext.getString(
                                 R.string.full_bill_balance_credit_card_spend,
                                 balanceCreditCardSpendModel.creditCardName,
-                                balanceCreditCardSpendModel.balanceSpendForMaximumCashback.toString(),
+                                balanceCreditCardSpendModel.installmentSpend.toString(),
                                 balanceCreditCardSpendModel.cashbackEarned.toString()
                             )
                             tvCardOfBalanceSpendFirst.isVisible = true
@@ -64,7 +64,7 @@ class StrategyFullBillViewHolder(
                             tvCardOfBalanceSpendSecond.text = viewContext.getString(
                                 R.string.full_bill_balance_credit_card_spend,
                                 balanceCreditCardSpendModel.creditCardName,
-                                balanceCreditCardSpendModel.balanceSpendForMaximumCashback.toString(),
+                                balanceCreditCardSpendModel.installmentSpend.toString(),
                                 balanceCreditCardSpendModel.cashbackEarned.toString()
                             )
                             tvCardOfBalanceSpendSecond.isVisible = true
@@ -77,7 +77,7 @@ class StrategyFullBillViewHolder(
                             tvCardOfBalanceSpendThird.text = viewContext.getString(
                                 R.string.full_bill_balance_credit_card_spend,
                                 balanceCreditCardSpendModel.creditCardName,
-                                balanceCreditCardSpendModel.balanceSpendForMaximumCashback.toString(),
+                                balanceCreditCardSpendModel.installmentSpend.toString(),
                                 balanceCreditCardSpendModel.cashbackEarned.toString()
                             )
                             tvCardOfBalanceSpendThird.isVisible = true

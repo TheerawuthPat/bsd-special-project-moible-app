@@ -43,7 +43,7 @@ class StrategySplitBillViewHolder(
                                 R.string.split_bill_credit_card_cashback,
                                 balanceCreditCardSpendModel.creditCardName,
                                 "${index+1}",
-                                balanceCreditCardSpendModel.balanceSpendForMaximumCashback.toString(),
+                                balanceCreditCardSpendModel.installmentSpend.toString(),
                                 balanceCreditCardSpendModel.cashbackEarned.toString()
                             )
                             tvCardOfSplitBillFirst.isVisible = true
@@ -58,7 +58,7 @@ class StrategySplitBillViewHolder(
                                 R.string.split_bill_credit_card_cashback,
                                 balanceCreditCardSpendModel.creditCardName,
                                 "${index+1}",
-                                balanceCreditCardSpendModel.balanceSpendForMaximumCashback.toString(),
+                                balanceCreditCardSpendModel.installmentSpend.toString(),
                                 balanceCreditCardSpendModel.cashbackEarned.toString()
                             )
                             tvCardOfSplitBillSecond.isVisible = true
@@ -73,7 +73,7 @@ class StrategySplitBillViewHolder(
                                 R.string.split_bill_credit_card_cashback,
                                 balanceCreditCardSpendModel.creditCardName,
                                 "${index+1}",
-                                balanceCreditCardSpendModel.balanceSpendForMaximumCashback.toString(),
+                                balanceCreditCardSpendModel.installmentSpend.toString(),
                                 balanceCreditCardSpendModel.cashbackEarned.toString()
                             )
                             tvCardOfSplitBillThird.isVisible = true
@@ -94,7 +94,7 @@ class StrategySplitBillViewHolder(
                             tvCardOfBalanceSpendFirst.text = viewContext.getString(
                                 R.string.full_bill_balance_credit_card_spend,
                                 balanceCreditCardSpendModel.creditCardName,
-                                balanceCreditCardSpendModel.balanceSpendForMaximumCashback.toString(),
+                                balanceCreditCardSpendModel.installmentSpend.toString(),
                                 balanceCreditCardSpendModel.cashbackEarned.toString()
                             )
                             tvCardOfBalanceSpendFirst.isVisible = true
@@ -107,7 +107,7 @@ class StrategySplitBillViewHolder(
                             tvCardOfBalanceSpendSecond.text = viewContext.getString(
                                 R.string.full_bill_balance_credit_card_spend,
                                 balanceCreditCardSpendModel.creditCardName,
-                                balanceCreditCardSpendModel.balanceSpendForMaximumCashback.toString(),
+                                balanceCreditCardSpendModel.installmentSpend.toString(),
                                 balanceCreditCardSpendModel.cashbackEarned.toString()
                             )
                             tvCardOfBalanceSpendSecond.isVisible = true

@@ -7,7 +7,8 @@ import java.text.DecimalFormat
 
 fun List<CashbackCondition>.getCashbackPerTime(estimateSpending: Int): Int {
     this.forEach { cbCondition ->
-        if (estimateSpending in (cbCondition.minSpend.toDefaultValue()) until cbCondition.maxSpend.toDefaultValue()) {
+        if (estimateSpending in (cbCondition.minSpend.toDefaultValue()) until cbCondition.maxSpend.toDefaultValue() + 1) {
+            Timber.d("!==! forEach: ${cbCondition.cashbackPerTime.toDefaultValue()} ")
             return cbCondition.cashbackPerTime.toDefaultValue()
         }
     }
@@ -65,7 +66,10 @@ fun calculateTotalCashback(numbers: List<Int>): Int {
     return total
 }
 
-fun calculateCashbackEarned(cashbackEarnedBath: Double, limitCashbackPerMonth: Double): Double {
+fun compareCashbackEarnedAndLimitCashback(
+    cashbackEarnedBath: Double,
+    limitCashbackPerMonth: Double
+): Double {
     return if (cashbackEarnedBath > limitCashbackPerMonth) {
         limitCashbackPerMonth
     } else {

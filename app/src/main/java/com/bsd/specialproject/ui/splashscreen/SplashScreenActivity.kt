@@ -29,24 +29,24 @@ class SplashScreenActivity : AppCompatActivity() {
         _binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         creditCardViewModel.fetchMyCardsFromFirebase()
-
         lifecycleScope.launch {
-            delay(1000)
+            delay(2000)
             binding.lottieAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(p0: Animator) {
                 }
 
                 override fun onAnimationEnd(p0: Animator) {
-                    if (creditCardViewModel.myCardList.value?.isNotEmpty() == true) {
-                        lifecycleScope.launch {
+                    lifecycleScope.launch {
+                        delay(2000)
+                        if (creditCardViewModel.myCardList.value?.isNotEmpty() == true) {
                             appPreference.myCreditCards =
                                 creditCardViewModel.myCardList.value?.map {
                                     it.id.toDefaultValue()
                                 }?.toSet()
                             appRouter.toMain(this@SplashScreenActivity)
+                        } else {
+                            appRouter.toAddCreditCard(this@SplashScreenActivity)
                         }
-                    } else {
-                        appRouter.toAddCreditCard(this@SplashScreenActivity)
                     }
                 }
 

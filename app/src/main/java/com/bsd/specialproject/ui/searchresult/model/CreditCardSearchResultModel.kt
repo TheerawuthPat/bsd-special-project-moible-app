@@ -3,7 +3,6 @@ package com.bsd.specialproject.ui.searchresult.model
 import com.bsd.specialproject.ui.addcreditcard.model.CreditCardResponse
 import com.bsd.specialproject.ui.common.model.CashbackCondition
 import com.bsd.specialproject.utils.*
-import com.google.gson.annotations.SerializedName
 
 data class CreditCardSearchResultModel(
     val id: String,
@@ -36,7 +35,7 @@ fun CreditCardResponse.mapToCreditCardSearchResultModel(
     earnedCategory = earnedCategory,
     cashbackPercent = this.cashbackConditions?.getCashbackPerTime(estimateSpending).toDefaultValue()
         .toString(),
-    cashbackEarnedBath = calculateCashbackEarned(
+    cashbackEarnedBath = compareCashbackEarnedAndLimitCashback(
         calculatePercentageToBath(
             estimateSpending.toDouble(),
             this.cashbackConditions?.getCashbackPerTime(estimateSpending).toDefaultValue()
