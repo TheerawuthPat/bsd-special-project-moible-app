@@ -347,11 +347,13 @@ class SearchResultViewModel(
 
         // step1: check estimateSpend > or < myExpenseLastMonth
         var estimateSpend = _searchResultModel.value?.estimateSpend.toDefaultValue()
-        val myExpenseLastMonth = appPreference.myExpenseLastMonth
-        var balanceSpendOfMonth = if (estimateSpend >= myExpenseLastMonth.toInt()) {
+        val myExpenseLastMonth = appPreference.myExpenseLastMonth.ifEmpty {
+            "0"
+        }.toInt()
+        var balanceSpendOfMonth = if (estimateSpend >= myExpenseLastMonth) {
             0
         } else {
-            myExpenseLastMonth.toInt() - estimateSpend
+            myExpenseLastMonth - estimateSpend
         }
         Timber.d("!==! UC5-Init EstimateSpend: ${estimateSpend}")
         Timber.d("!==! UC5-Calculate BalanceSpendOfMonth: ${balanceSpendOfMonth}")
@@ -612,7 +614,7 @@ class SearchResultViewModel(
                 mustCreditCardSpends = mustCreditCards,
                 balanceCreditCardSpends = balanceCreditCards,
                 totalCashback = totalCashback,
-                myExpenseLastMonth = myExpenseLastMonth,
+                myExpenseLastMonth = myExpenseLastMonth.toString(),
                 balanceSpend = balanceSpendOfMonth.toString()
             )
         } else {
@@ -788,7 +790,7 @@ class SearchResultViewModel(
                 mustCreditCardSpends = mustCreditCards,
                 balanceCreditCardSpends = balanceCreditCards,
                 totalCashback = totalCashback,
-                myExpenseLastMonth = myExpenseLastMonth,
+                myExpenseLastMonth = myExpenseLastMonth.toString(),
                 balanceSpend = balanceSpendOfMonth.toString()
             )
         }
