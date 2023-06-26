@@ -138,6 +138,7 @@ class SearchResultViewModel(
                         document.toObject(PromotionListResponse::class.java)
                     foryouPromotionList.add(promotionListResponse)
                 }
+                Timber.d("!==! UC2.1: AllPromotion: ${foryouPromotionList.map { it.name }}")
 
                 val promotionSearchResultFilter = foryouPromotionList.filter {
                     isCategoryMatchInPromotion(
@@ -153,6 +154,7 @@ class SearchResultViewModel(
                         it.startDate.toDefaultValue(), it.endDate.toDefaultValue()
                     )
                 }
+                Timber.d("!==! UC2.1: FilterPromotionByBusinessRule: ${promotionSearchResultFilter.map { it.name }}")
 
                 // Filter by Distance or Filter by Highest Cashback
                 if (myLocation != null) {
@@ -165,7 +167,7 @@ class SearchResultViewModel(
                         it.distance
                     }
                     _foryouPromotionList.postValue(promotionFilterByLocation)
-//                    Timber.d("!==! promotionFilter ByLocation: ${promotionFilterByLocation}")
+                    Timber.d("!==! UC2.1: PromotionByLocation SortedByDistance: ${promotionFilterByLocation.map { it.name }}")
                 } else {
                     // Sorting Highest Cashback
                     val promotionFilterByCashback = promotionSearchResultFilter.map {
@@ -177,11 +179,11 @@ class SearchResultViewModel(
                         it.cashbackEarnedBath.toDouble()
                     }
                     _foryouPromotionList.postValue(promotionFilterByCashback)
-//                    Timber.d("!==! promotionFilter ByCashback: ${promotionFilterByCashback}")
+                    Timber.d("!==! UC2.1: PromotionByCashback SortedByCashbackEarned: ${promotionFilterByCashback.map { it.name }}")
                 }
             }
             .addOnFailureListener { exception ->
-                Timber.e("Error getting documents. ${exception}")
+                Timber.e("!==! UC2.1: ForYou Promotion Error getting documents. ${exception}")
             }
     }
 

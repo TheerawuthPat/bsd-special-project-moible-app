@@ -2,13 +2,11 @@ package com.bsd.specialproject.utils
 
 import com.bsd.specialproject.constants.UNLIMIT_MAX_SPEND
 import com.bsd.specialproject.ui.common.model.CashbackCondition
-import timber.log.Timber
 import java.text.DecimalFormat
 
 fun List<CashbackCondition>.getCashbackPerTime(estimateSpending: Int): Int {
     this.forEach { cbCondition ->
         if (estimateSpending in (cbCondition.minSpend.toDefaultValue()) until cbCondition.maxSpend.toDefaultValue() + 1) {
-            Timber.d("!==! forEach: ${cbCondition.cashbackPerTime.toDefaultValue()} ")
             return cbCondition.cashbackPerTime.toDefaultValue()
         }
     }
