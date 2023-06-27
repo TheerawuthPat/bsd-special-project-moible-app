@@ -91,9 +91,12 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
             onClick = {}
         )
     }
+    private val creditCardBenefitEmptyAdapter by lazy {
+        CreditCardBenefitEmptyAdapter()
+    }
     private val creditCardBenefitAdapter by lazy {
-        CreditCardBenefitAdapter(onClick = {click ->
-            if(click is CreditCardClick.SavedCashbackEarnedToMyCardClick) {
+        CreditCardBenefitAdapter(onClick = { click ->
+            if (click is CreditCardClick.SavedCashbackEarnedToMyCardClick) {
                 showConfirmSaveToCardBenefit(click.item)
             }
         })
@@ -130,9 +133,9 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
     private val titleForYouPromotionAdapter by lazy {
         TitleForYouHeaderAdapter(onClicked = { click ->
             if (click is PromotionClick.FilterByCashbackClick) {
-                searchResultViewModel.fetchPromotion(null)
+                searchResultViewModel.fetchForYouPromotion(null)
             } else {
-                searchResultViewModel.fetchPromotion(myLocation)
+                searchResultViewModel.fetchForYouPromotion(myLocation)
             }
         })
     }
@@ -154,6 +157,7 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
             horizontalBestOfCreditCardAdapter,
             titleCreditCardBenefitAdapter,
             horizontalCreditCardBenefitAdapter,
+            creditCardBenefitEmptyAdapter,
             titleStrategyHeaderAdapter,
             strategyCreditCardAdapter,
             titleMyPromotionAdapter,
@@ -203,17 +207,20 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
                 searchResultViewModel.fetchMyPromotion()
                 delay(1000)
                 searchResultViewModel.fetchCardBenefitResult()
-                delay(1000)
+                delay(2000)
                 searchResultViewModel.fetchStrategyCreditCard(_isSpitBill)
                 if (!it.isGrantedLocation) {
-                    searchResultViewModel.fetchPromotion(null)
+                    searchResultViewModel.fetchForYouPromotion(null)
                 } else {
-                    searchResultViewModel.fetchPromotion(myLocation)
+                    searchResultViewModel.fetchForYouPromotion(myLocation)
                 }
             }
         }
         searchResultViewModel.creditCardSearchResultList.observe(this) { creditCardResultModelList ->
-            creditCardBenefitAdapter.submitList(creditCardResultModelList)
+            if (creditCardResultModelList.isNotEmpty()) {
+                concatAdapter.removeAdapter(creditCardBenefitEmptyAdapter)
+                creditCardBenefitAdapter.submitList(creditCardResultModelList)
+            }
         }
         searchResultViewModel.foryouPromotionList.observe(this) { forYouPromotionList ->
             forYouPromotionAdapter.submitList(forYouPromotionList)
@@ -249,7 +256,7 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
             strategyCreditCardAdapter.submitList(it)
         }
         searchResultViewModel.savedToMyCard.observe(this) {
-            if(it) {
+            if (it) {
                 searchResultViewModel.fetchCardBenefitResult()
             }
         }
@@ -289,8 +296,8 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         currentLocation.longitude = 100.52948211475976
         myLocation = MyLocation(currentLocation.latitude, currentLocation.longitude)
 
-        Timber.d("!==! lat: ${latitude}")
-        Timber.d("!==! lng: ${longitude}")
+        Timber.d("!==! UC2.1 ForYouPromotion GetCurrentLocation-latitude: ${latitude}")
+        Timber.d("!==! UC2.1 ForYouPromotion GetCurrentLocation-longitude: ${longitude}")
     }
 
     private fun showConfirmCreditCardListDialog(forYouPromotionModel: ForYouPromotionModel) {

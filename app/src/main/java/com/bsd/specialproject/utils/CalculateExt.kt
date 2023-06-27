@@ -2,6 +2,7 @@ package com.bsd.specialproject.utils
 
 import com.bsd.specialproject.constants.UNLIMIT_MAX_SPEND
 import com.bsd.specialproject.ui.common.model.CashbackCondition
+import timber.log.Timber
 import java.text.DecimalFormat
 
 fun List<CashbackCondition>.getCashbackPerTime(estimateSpending: Int): Int {
@@ -34,7 +35,7 @@ fun List<CashbackCondition>.calculateMoreAccumulateSpend(
 ): Int {
     if (this.size > 1) {
         this.forEach { cbCondition ->
-            if (accumulateSpend in (cbCondition.minSpend.toDefaultValue()) until cbCondition.maxSpend.toDefaultValue()) {
+            if (accumulateSpend in (cbCondition.minSpend.toDefaultValue()) until cbCondition.maxSpend.toDefaultValue()+1) {
                 return if (cbCondition.maxSpend == UNLIMIT_MAX_SPEND) {
                     val currentCashbackBath = calculatePercentageToBath(
                         accumulateSpend.toDouble(),

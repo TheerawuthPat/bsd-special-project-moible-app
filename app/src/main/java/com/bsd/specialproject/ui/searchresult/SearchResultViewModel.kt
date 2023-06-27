@@ -19,9 +19,7 @@ class SearchResultViewModel(
     private val appPreference: AppPreference,
     private val deviceSettings: DeviceSettings
 ) : ViewModel() {
-    private val creditCardCollectionStore by lazy {
-        Firebase.firestore.collection(CREDIT_CARD_LIST)
-    }
+
     private val promotionCollectionStore by lazy {
         Firebase.firestore.collection(PROMOTION_LIST)
     }
@@ -65,7 +63,7 @@ class SearchResultViewModel(
             var bestOfCreditCardId = ""
             addSource(_myPromotionList) { myPromotionList ->
                 if (myPromotionList.isNotEmpty()) {
-//                    Timber.d("!==! MediatorLiveData MyPromotion: ${myPromotionList.firstOrNull()?.cardSelectedId.toDefaultValue()}")
+                    Timber.d("!==! UC2 BestOfCreditCard-MyPromotion from UC2.2: ${myPromotionList.firstOrNull()?.cardSelectedId.toDefaultValue()}")
                     bestOfCreditCardId =
                         myPromotionList.firstOrNull()?.cardSelectedId.toDefaultValue()
                     value = bestOfCreditCardId
@@ -73,14 +71,19 @@ class SearchResultViewModel(
             }
             addSource(_creditCardSearchResultList) { creditCardResultList ->
                 if (creditCardResultList.isNotEmpty() && bestOfCreditCardId.isEmpty()) {
-//                    Timber.d("!==! MediatorLiveData CardResult: ${creditCardResultList.firstOrNull()?.id.toDefaultValue()}")
+                    Timber.d("!==! UC2 BestOfCreditCard-CardBenefit from UC2.1: ${creditCardResultList.firstOrNull()?.id.toDefaultValue()}")
                     bestOfCreditCardId = creditCardResultList.firstOrNull()?.id.toDefaultValue()
                     value = bestOfCreditCardId
                 }
             }
             addSource(_foryouPromotionList) { foryouPromotionList ->
                 if (foryouPromotionList.isNotEmpty() && bestOfCreditCardId.isEmpty()) {
-//                    Timber.d("!==! MediatorLiveData ForYou: ${foryouPromotionList.firstOrNull()?.creditCardRelation?.firstOrNull()}")
+                    Timber.d(
+                        "!==! UC2 BestOfCreditCard-ForYouPromotion from UC2.3: ${
+                            foryouPromotionList.firstOrNull()?.creditCardRelation?.firstOrNull()
+                                .toDefaultValue()
+                        }"
+                    )
                     bestOfCreditCardId =
                         foryouPromotionList.firstOrNull()?.creditCardRelation?.firstOrNull()
                             .toDefaultValue()
@@ -128,7 +131,7 @@ class SearchResultViewModel(
         }
     }
 
-    fun fetchPromotion(myLocation: MyLocation?) {
+    fun fetchForYouPromotion(myLocation: MyLocation?) {
         promotionCollectionStore
             .get()
             .addOnSuccessListener { result ->
@@ -237,6 +240,7 @@ class SearchResultViewModel(
                 it.id == promotionModel.id
             }
             if (isHaveThisPromotion.toDefaultValue()) {
+                Timber.d("!==! UC4: AddToMyPromotion-IsExistPromotion: ${isHaveThisPromotion}")
                 val currentMyPromotion = _myPromotionList.value?.single {
                     it.id == promotionModel.id
                 }
@@ -244,6 +248,7 @@ class SearchResultViewModel(
                 val currentAccumulateSpend =
                     currentMyPromotion?.accumulateSpend?.toDefaultValue()
                         ?.plus(currentEstimateSpend)
+                Timber.d("!==! UC4: AddToMyPromotion-UpdateAccumulateSpend: ${currentAccumulateSpend}")
                 promotionModel.mapToMyPromotion(
                     currentAccumulateSpend.toDefaultValue(),
                     cardSelectedId,
@@ -264,6 +269,7 @@ class SearchResultViewModel(
                 cardSelectedName
             )
         }
+        Timber.d("!==! UC4: AddToMyPromotion: ${myPromotionUpdatedModel}")
         myUserCollectionStore.collection(MY_PROMOTION)
             .document(myPromotionUpdatedModel.id.toDefaultValue() + "_" + cardSelectedId)
             .set(myPromotionUpdatedModel)
@@ -305,22 +311,31 @@ class SearchResultViewModel(
                 }
                 it.moreCashbackPercent =
                     it.cashbackConditions?.getCashbackPerTime(totalMoreSpend).toDefaultValue()
+                Timber.d("!==! UC2.2: MyPromotion-MoreAccumulateSpend: ${it.moreAccumulateSpend}")
+                Timber.d("!==! UC2.2: MyPromotion-MoreCashbackPercent: ${it.moreCashbackPercent}")
                 it
             }
+            Timber.d("!==! UC2.2: MyPromotion-Criteria: ${myPromotionFilter.map { it.criteria }}")
 
             //check criteria count
             val firstCriteriaCount = myPromotion.count { it.criteria == 1 }
             val secondCriteriaCount = myPromotion.count { it.criteria == 2 }
+            Timber.d("!==! UC2.2: MyPromotion-Count Criteria1: ${firstCriteriaCount}")
+            Timber.d("!==! UC2.2: MyPromotion-Count Criteria2: ${secondCriteriaCount}")
 
             //sorting by criteria
             val myPromotionSorted = if (firstCriteriaCount >= secondCriteriaCount) {
-                myPromotion.sortedByDescending {
+                val sortedByCashback = myPromotion.sortedByDescending {
                     it.cashbackEarnedBath
                 }
+                Timber.d("!==! UC2.2: MyPromotion-SortedByCashbackEarned: ${sortedByCashback}")
+                sortedByCashback
             } else {
-                myPromotion.sortedBy {
+                val sortedByRemainingDate = myPromotion.sortedBy {
                     it.remainingDate?.toInt()
                 }
+                Timber.d("!==! UC2.2: MyPromotion-SortedByRemainingDate: ${sortedByRemainingDate}")
+                sortedByRemainingDate
             }
 
             _myPromotionList.postValue(myPromotionSorted)
@@ -643,9 +658,13 @@ class SearchResultViewModel(
                                 )
                         Timber.d("!==! UC5-estimateSpend: ${estimateSpend}")
                         Timber.d("!==! UC5-it.cashbackConditions: ${it.cashbackConditions}")
-                        Timber.d("!==! UC5-getCashbackPerTime: ${it.cashbackConditions.getCashbackPerTime(
-                            estimateSpend
-                        ).toDefaultValue()}")
+                        Timber.d(
+                            "!==! UC5-getCashbackPerTime: ${
+                                it.cashbackConditions.getCashbackPerTime(
+                                    estimateSpend
+                                ).toDefaultValue()
+                            }"
+                        )
                         it.mapToMustCreditCardSpendModel(
                             estimateSpend,
                             null,
