@@ -504,7 +504,7 @@ class SearchResultViewModel(
 
                         else -> {
                             Timber.d("!==! UC5-SplitBill NextCard After FirstCard")
-                            if (mustCreditCards.isEmpty()) {
+                            if (mustCreditCards.isNotEmpty()) {
                                 val reCalculateMaximumSpendForCashback =
                                     strategySearchResultModel.limitCashbackPerMonth.toDefaultValue()
                                         .calculateSpendingForCashback(
@@ -554,14 +554,15 @@ class SearchResultViewModel(
                                     val balanceSpendForMaximumCashback =
                                         reCalculateMaximumSpendForCashback - mustCardResult.installmentSpend
 
+                                    Timber.d("!==! UC5-SplitBill balanceSpending ${balanceSpending}")
                                     Timber.d("!==! UC5-SplitBill firstBalanceCardResult-reCalculateMaximumSpendForCashback ${reCalculateMaximumSpendForCashback}")
                                     Timber.d("!==! UC5-SplitBill firstBalanceCardResult-balanceSpendForMaximumCashback ${balanceSpendForMaximumCashback}")
                                     //add to first balance items
                                     firstBalanceCardResult =
                                         strategySearchResultModel.mapToBalanceCreditCardSpendModel(
-                                            balanceSpendForMaximumCashback,
+                                            balanceSpending,
                                             null,
-                                            balanceSpendForMaximumCashback
+                                            balanceSpending
                                         )
                                     balanceCreditCards.add(firstBalanceCardResult)
 
