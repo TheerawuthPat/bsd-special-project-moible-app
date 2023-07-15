@@ -155,16 +155,16 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
         ConcatAdapter(
             config,
             horizontalBestOfCreditCardAdapter,
-            titleCreditCardBenefitAdapter,
-            horizontalCreditCardBenefitAdapter,
-            creditCardBenefitEmptyAdapter,
-            titleStrategyHeaderAdapter,
-            strategyCreditCardAdapter,
             titleMyPromotionAdapter,
             horizontalMyPromotionAdapter,
             myPromotionEmptyAdapter,
             titleForYouPromotionAdapter,
-            forYouPromotionAdapter
+            forYouPromotionAdapter,
+            titleCreditCardBenefitAdapter,
+            horizontalCreditCardBenefitAdapter,
+            creditCardBenefitEmptyAdapter,
+            titleStrategyHeaderAdapter,
+            strategyCreditCardAdapter
         )
     }
     private var _searchResultModel: SearchResultModel? = null
@@ -186,7 +186,7 @@ class SearchResultActivity : AppCompatActivity(), OnLocationUpdatedListener {
                 submitList(
                     listOf(
                         ViewTitleModel(
-                            title = "กลยุทย์การใช้จ่ายบัตรเครดิต",
+                            title = "แผนการใช้จ่ายบัตรเครดิตต่อเดือน",
                             isShowViewAll = false
                         )
                     )
